@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "353354365595",
+    "project_id": "simak-mobileapps",
+    "storage_bucket": "simak-mobileapps.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:353354365595:android:ff0cbbc564e1fbdcbb243e",
+        "android_client_info": {
+          "package_name": "erichfromm.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYX3QR56ccDelwuTowWfx2mprNEijXhPY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
