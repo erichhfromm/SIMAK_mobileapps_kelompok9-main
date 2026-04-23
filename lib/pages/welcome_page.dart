@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
 
@@ -39,7 +38,7 @@ class WelcomePage extends StatelessWidget {
                       const SizedBox(width: 8),
                       const Text(
                         'My SWU',
-                            style: TextStyle(
+                        style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -72,7 +71,7 @@ class WelcomePage extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             elevation: 3,
                           ),
-                            child: const Text(
+                          child: const Text(
                             "Create Account",
                             style: TextStyle(
                               color: Colors.white,

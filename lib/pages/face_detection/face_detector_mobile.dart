@@ -1,8 +1,8 @@
-import 'dart:typed_data';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'face_detector_interface.dart';
+import 'package:flutter/foundation.dart';
 
 class MobileFaceDetector implements IFaceDetector {
   late FaceDetector _faceDetector;
@@ -36,7 +36,7 @@ class MobileFaceDetector implements IFaceDetector {
 
       final inputImage = InputImage.fromFilePath(imagePath);
       final faces = await _faceDetector.processImage(inputImage);
-      
+
       // Clean up temp file
       if (await file.exists()) {
         await file.delete();
@@ -44,7 +44,7 @@ class MobileFaceDetector implements IFaceDetector {
 
       return faces.isNotEmpty;
     } catch (e) {
-      print("Error detecting face: $e");
+      debugPrint("Error detecting face: $e");
       return false;
     }
   }

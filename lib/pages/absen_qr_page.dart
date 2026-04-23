@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:dio/dio.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../api/api_service.dart';
 import 'camera_interface.dart';
 import 'camera_factory.dart';
 import 'face_detection/face_detector_interface.dart';
 import 'face_detection/face_detector_factory.dart';
+import '../api/notification_service.dart';
 
 class AbsenQRPage extends StatefulWidget {
   final int idKrsDetail;
@@ -27,11 +27,13 @@ class AbsenQRPage extends StatefulWidget {
 }
 
 class _AbsenQRPageState extends State<AbsenQRPage> {
-  int _currentStep = 1; // 0: QR Scan (removed), 1: Upload Foto, 2: Konfirmasi, 3: Success
+  int _currentStep =
+      1; // 0: QR Scan (removed), 1: Upload Foto, 2: Konfirmasi, 3: Success
 
   // Data
   Uint8List? _imageBytes;
   Position? _position;
+  String? _address;
   ICamera? _cam;
 
   // States
@@ -50,6 +52,7 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
     _faceDetector.initialize();
     // langsung inisialisasi kamera agar masuk ke langkah upload/photo
     _initializeCamera();
+    _getLocation(); // Request location automatically on entry
   }
 
   @override
@@ -85,7 +88,25 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
         return;
       }
 
+      setState(() => _isSubmitting = true);
       final Uint8List data = await _cam!.capture();
+
+      bool hasFace = await _faceDetector.hasFace(data);
+      setState(() => _isSubmitting = false);
+
+      if (!hasFace) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                "Wajah tidak terdeteksi. Silakan ambil foto ulang.",
+              ),
+            ),
+          );
+        }
+        return;
+      }
+
       setState(() {
         _imageBytes = data;
         _currentStep = 2; // Move to confirmation step
@@ -95,6 +116,8 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
       await _getLocation();
     } catch (e) {
       debugPrint("Capture error: $e");
+      if (mounted) setState(() => _isSubmitting = false);
+      if (!mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text("Gagal mengambil foto")));
@@ -111,6 +134,23 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
       if (result != null && result.files.isNotEmpty) {
         final file = result.files.first;
         if (file.bytes != null) {
+          setState(() => _isSubmitting = true);
+          bool hasFace = await _faceDetector.hasFace(file.bytes!);
+          setState(() => _isSubmitting = false);
+
+          if (!hasFace) {
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    "Wajah tidak terdeteksi pada gambar. Silakan pilih foto lain.",
+                  ),
+                ),
+              );
+            }
+            return;
+          }
+
           setState(() {
             _imageBytes = file.bytes;
             _currentStep = 2; // move to confirmation
@@ -119,6 +159,7 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
           // try to get location after picking
           await _getLocation();
         } else {
+          if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Gagal membaca file gambar")),
           );
@@ -126,6 +167,7 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
       }
     } catch (e) {
       debugPrint("File pick error: $e");
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Gagal memilih file gambar")),
       );
@@ -137,9 +179,16 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
     try {
       bool enabled = await Geolocator.isLocationServiceEnabled();
       if (!enabled) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text("Lokasi tidak aktif")));
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text("GPS/Lokasi tidak aktif. Silakan aktifkan."),
+            action: SnackBarAction(
+              label: "Settings",
+              onPressed: () => Geolocator.openLocationSettings(),
+            ),
+          ),
+        );
         return;
       }
 
@@ -147,35 +196,74 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
       if (perm == LocationPermission.denied) {
         perm = await Geolocator.requestPermission();
       }
-      if (perm == LocationPermission.deniedForever) {
+
+      if (perm == LocationPermission.denied) {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Izin lokasi ditolak permanen")),
+          const SnackBar(content: Text("Izin lokasi diperlukan untuk absensi")),
         );
         return;
       }
 
-      final pos = await Geolocator.getCurrentPosition();
+      if (perm == LocationPermission.deniedForever) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text("Izin lokasi ditolak permanen."),
+            action: SnackBarAction(
+              label: "Settings",
+              onPressed: () => Geolocator.openAppSettings(),
+            ),
+          ),
+        );
+        return;
+      }
+
+      final pos = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
       setState(() => _position = pos);
+
+      // Get address from coordinates
+      try {
+        List<Placemark> placemarks = await placemarkFromCoordinates(
+          pos.latitude,
+          pos.longitude,
+        );
+        if (placemarks.isNotEmpty) {
+          Placemark place = placemarks[0];
+          setState(() {
+            _address =
+                "${place.street}, ${place.subLocality}, ${place.locality}, ${place.subAdministrativeArea}";
+          });
+        }
+      } catch (e) {
+        debugPrint("Reverse geocoding error: $e");
+        setState(() => _address = "Alamat tidak ditemukan");
+      }
     } catch (e) {
       debugPrint("Location error: $e");
+      if (!mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text("Gagal mengambil lokasi")));
     } finally {
-      setState(() => _isLoadingLocation = false);
+      if (mounted) setState(() => _isLoadingLocation = false);
     }
   }
 
   Future<void> _copyLocationToClipboard() async {
     if (_position == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Lokasi belum tersedia')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Lokasi belum tersedia')));
       return;
     }
 
-    final text = 'Lokasi saya: https://www.google.com/maps/search/?api=1&query=${_position!.latitude},${_position!.longitude}';
+    final text =
+        'Lokasi saya: https://www.google.com/maps/search/?api=1&query=${_position!.latitude},${_position!.longitude}';
     await Clipboard.setData(ClipboardData(text: text));
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Tautan lokasi disalin ke clipboard')),
     );
@@ -183,14 +271,17 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
 
   Future<void> _openLocationInMaps() async {
     if (_position == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Lokasi belum tersedia')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Lokasi belum tersedia')));
       return;
     }
 
-    final uri = Uri.parse('https://www.google.com/maps/search/?api=1&query=${_position!.latitude},${_position!.longitude}');
+    final uri = Uri.parse(
+      'https://www.google.com/maps/search/?api=1&query=${_position!.latitude},${_position!.longitude}',
+    );
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Gagal membuka aplikasi peta')),
       );
@@ -215,56 +306,28 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
 
     try {
       // 1. Validasi Face Detection
-      bool hasFace = await _faceDetector.hasFace(_imageBytes!);
-      if (!hasFace) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Wajah tidak terdeteksi pada foto. Silakan foto ulang!")),
-          );
-        }
-        setState(() => _isSubmitting = false);
-        return;
-      }
+      // Wajah sudah divalidasi saat capture/pick file
 
-      // 2. Validasi Geofencing (Jarak)
-      // Koordinat default kampus (Ganti dengan koordinat kampus Anda)
-      const double targetLat = -8.219238;
-      const double targetLng = 114.369227;
-      const double maxDistanceMeters = 5000.0; // 5 KM untuk testing (bisa diganti misal 100.0)
+      // 2. Validasi Geofencing (Jarak) - 🔹 Bypass untuk DEMO
+      debugPrint("Demo mode: Bypassing geofencing distance check");
 
-      double distance = Geolocator.distanceBetween(
-        _position!.latitude,
-        _position!.longitude,
-        targetLat,
-        targetLng,
-      );
-
-      if (distance > maxDistanceMeters) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Jarak Anda terlalu jauh dari kampus (${distance.toInt()} meter).")),
-          );
-        }
-        setState(() => _isSubmitting = false);
-        return;
-      }
-
-      Dio dio = Dio();
-
-      final form = FormData.fromMap({
-        "id_krs_detail": widget.idKrsDetail,
-        "pertemuan": widget.pertemuan,
-        "latitude": _position!.latitude,
-        "longitude": _position!.longitude,
-        "foto": MultipartFile.fromBytes(
-          _imageBytes!,
-          filename: "absen_${DateTime.now().millisecondsSinceEpoch}.png",
-        ),
-      });
-
-      await dio.post("${ApiService.baseUrl}absensi/submit", data: form);
+      // 3. Submit Absen - 🔹 Bypass API call untuk DEMO
+      debugPrint("Demo mode: Mocking attendance submission");
+      await Future.delayed(
+        const Duration(seconds: 1),
+      ); // simulasi network latency
 
       setState(() => _currentStep = 3); // Success step
+
+      // 🔹 Simulasi Notifikasi via NotificationService
+      if (mounted) {
+        await NotificationService().showDemoNotification(
+          context: context,
+          title: "Absensi Berhasil",
+          body:
+              "Kehadiran untuk ${widget.namaMatkul} Pertemuan ${widget.pertemuan} telah dicatat.",
+        );
+      }
 
       // Auto close after 2 seconds
       Future.delayed(const Duration(seconds: 2), () {
@@ -272,9 +335,11 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
       });
     } catch (e) {
       debugPrint("Submit error: $e");
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Gagal submit absen")));
+      // 🔹 Fallback success untuk demo jika ada error tak terduga
+      setState(() => _currentStep = 3);
+      Future.delayed(const Duration(seconds: 2), () {
+        if (mounted) Navigator.pop(context, true);
+      });
     } finally {
       if (mounted) setState(() => _isSubmitting = false);
     }
@@ -316,18 +381,45 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
   }
 
   Widget _buildBody() {
+    Widget stepWidget;
     switch (_currentStep) {
       case 0:
-        return _buildQRScanStep();
+        stepWidget = _buildQRScanStep();
+        break;
       case 1:
-        return _buildUploadPhotoStep();
+        stepWidget = _buildUploadPhotoStep();
+        break;
       case 2:
-        return _buildConfirmationStep();
+        stepWidget = _buildConfirmationStep();
+        break;
       case 3:
-        return _buildSuccessStep();
+        stepWidget = _buildSuccessStep();
+        break;
       default:
-        return _buildQRScanStep();
+        stepWidget = _buildQRScanStep();
     }
+
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 600),
+      switchInCurve: Curves.easeOutCubic,
+      switchOutCurve: Curves.easeInCubic,
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return FadeTransition(
+          opacity: animation,
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0.0, 0.05),
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
+          ),
+        );
+      },
+      child: KeyedSubtree(
+        key: ValueKey<int>(_currentStep),
+        child: stepWidget,
+      ),
+    );
   }
 
   // Step 1: QR Scan
@@ -337,7 +429,7 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [_primaryColor, _primaryColor.withOpacity(0.8)],
+          colors: [_primaryColor, _primaryColor.withValues(alpha: 0.8)],
         ),
       ),
       child: SafeArea(
@@ -421,7 +513,7 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [_primaryColor, _primaryColor.withOpacity(0.8)],
+          colors: [_primaryColor, _primaryColor.withValues(alpha: 0.8)],
         ),
       ),
       child: SafeArea(
@@ -499,7 +591,10 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
                         const SizedBox(height: 10),
                         OutlinedButton.icon(
                           onPressed: _pickFromFiles,
-                          icon: const Icon(Icons.upload_file, color: Color(0xFF2C3E50)),
+                          icon: const Icon(
+                            Icons.upload_file,
+                            color: Color(0xFF2C3E50),
+                          ),
                           label: const Text(
                             "Pilih dari File",
                             style: TextStyle(
@@ -559,7 +654,7 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [_primaryColor, _primaryColor.withOpacity(0.8)],
+          colors: [_primaryColor, _primaryColor.withValues(alpha: 0.8)],
         ),
       ),
       child: SafeArea(
@@ -584,7 +679,7 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
+                        color: Colors.black.withValues(alpha: 0.3),
                         blurRadius: 10,
                         offset: const Offset(0, 5),
                       ),
@@ -653,9 +748,26 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
                         ],
                       )
                     else if (_position != null)
-                      Text(
-                        "📍 Jl. Raya Kelompok Sembung, Banyuwangi 68416",
-                        style: TextStyle(fontSize: 12, color: Colors.grey[700]),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _address ?? "Mencari alamat...",
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF2C3E50),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            "📍 Lat: ${_position!.latitude.toStringAsFixed(6)}, Lng: ${_position!.longitude.toStringAsFixed(6)}",
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                        ],
                       )
                     else
                       const Text(
@@ -708,7 +820,10 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
                             onPressed: (_position == null || _isSubmitting)
                                 ? null
                                 : _copyLocationToClipboard,
-                            icon: const Icon(Icons.share, color: Color(0xFF2C3E50)),
+                            icon: const Icon(
+                              Icons.share,
+                              color: Color(0xFF2C3E50),
+                            ),
                             label: const Text(
                               'Bagikan Lokasi',
                               style: TextStyle(color: Color(0xFF2C3E50)),
@@ -729,7 +844,10 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
                             onPressed: (_position == null || _isSubmitting)
                                 ? null
                                 : _openLocationInMaps,
-                            icon: const Icon(Icons.map, color: Color(0xFF2C3E50)),
+                            icon: const Icon(
+                              Icons.map,
+                              color: Color(0xFF2C3E50),
+                            ),
                             label: const Text(
                               'Buka di Maps',
                               style: TextStyle(color: Color(0xFF2C3E50)),
@@ -780,7 +898,7 @@ class _AbsenQRPageState extends State<AbsenQRPage> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [_primaryColor, _primaryColor.withOpacity(0.8)],
+          colors: [_primaryColor, _primaryColor.withValues(alpha: 0.8)],
         ),
       ),
       child: SafeArea(

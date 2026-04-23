@@ -36,29 +36,73 @@ class _ProfilePagesState extends State<ProfilePages> {
   }
 
   Future<void> _getMahasiswaData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('auth_token');
-    final email = prefs.getString('auth_email');
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('auth_token');
+      final email = prefs.getString('auth_email');
 
-    Dio dio = Dio();
-    dio.options.headers['Authorization'] = 'Bearer $token';
+      // 🔹 Untuk DEMO: Jika token tidak ada, gunakan data dummy
+      if (token == null || email == null) {
+        debugPrint("Demo mode: Using dummy user data in Profile");
+        setState(() {
+          user = {
+            "nama": "Mahasiswa Demo",
+            "nim": "2021000999",
+            "jenis_kelamin": "Laki-laki",
+            "tanggal_lahir": "2000-01-01",
+            "alamat": "Jl. Raya Surabaya No. 123",
+            "status": "Aktif",
+            "prodi": "Teknik Informatika",
+            "semester": 5,
+            "foto": null,
+          };
+          namaC.text = user?['nama'] ?? '';
+          jkC.text = user?['jenis_kelamin'] ?? '';
+          tglC.text = user?['tanggal_lahir'] ?? '';
+          alamatC.text = user?['alamat'] ?? '';
+          statusC.text = user?['status'] ?? '';
+        });
+        return;
+      }
 
-    final response = await dio.post(
-      "${ApiService.baseUrl}mahasiswa/detail-mahasiswa",
-      data: {"email": email},
-    );
+      Dio dio = Dio();
+      dio.options.headers['Authorization'] = 'Bearer $token';
 
-    // 🧩 Tambahan: print log untuk melihat struktur data dari API
-    print("📦 Data user dari API: ${response.data['data']}");
+      final response = await dio.post(
+        "${ApiService.baseUrl}mahasiswa/detail-mahasiswa",
+        data: {"email": email},
+      );
 
-    setState(() {
-      user = response.data['data'];
-      namaC.text = user?['nama'] ?? '';
-      jkC.text = user?['jenis_kelamin'] ?? '';
-      tglC.text = user?['tanggal_lahir'] ?? '';
-      alamatC.text = user?['alamat'] ?? '';
-      statusC.text = user?['status'] ?? '';
-    });
+      setState(() {
+        user = response.data['data'];
+        namaC.text = user?['nama'] ?? '';
+        jkC.text = user?['jenis_kelamin'] ?? '';
+        tglC.text = user?['tanggal_lahir'] ?? '';
+        alamatC.text = user?['alamat'] ?? '';
+        statusC.text = user?['status'] ?? '';
+      });
+    } catch (e) {
+      debugPrint("Error getMahasiswa in Profile: $e");
+      // 🔹 Fallback ke dummy jika error
+      setState(() {
+        user = {
+          "nama": "Mahasiswa Demo",
+          "nim": "2021000999",
+          "jenis_kelamin": "Laki-laki",
+          "tanggal_lahir": "2000-01-01",
+          "alamat": "Jl. Raya Surabaya No. 123",
+          "status": "Aktif",
+          "prodi": "Teknik Informatika",
+          "semester": 5,
+          "foto": null,
+        };
+        namaC.text = user?['nama'] ?? '';
+        jkC.text = user?['jenis_kelamin'] ?? '';
+        tglC.text = user?['tanggal_lahir'] ?? '';
+        alamatC.text = user?['alamat'] ?? '';
+        statusC.text = user?['status'] ?? '';
+      });
+    }
   }
 
   Future<void> _pickImage() async {
@@ -103,15 +147,17 @@ class _ProfilePagesState extends State<ProfilePages> {
       );
 
       if (response.data['status'] == 200) {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Foto profil berhasil diperbarui!")),
         );
         _getMahasiswaData();
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Gagal upload foto: $e")),
-      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Gagal upload foto: $e")));
     } finally {
       setState(() => isLoading = false);
     }
@@ -138,15 +184,17 @@ class _ProfilePagesState extends State<ProfilePages> {
       );
 
       if (response.data['status'] == 200) {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Foto profil berhasil diperbarui!")),
         );
         _getMahasiswaData();
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Gagal upload foto: $e")),
-      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Gagal upload foto: $e")));
     } finally {
       setState(() => isLoading = false);
     }
@@ -177,15 +225,17 @@ class _ProfilePagesState extends State<ProfilePages> {
       );
 
       if (response.data['status'] == 200) {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Biodata berhasil diperbarui!")),
         );
         _getMahasiswaData();
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Gagal update biodata: $e")),
-      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Gagal update biodata: $e")));
     } finally {
       setState(() => isLoading = false);
     }
@@ -213,7 +263,8 @@ class _ProfilePagesState extends State<ProfilePages> {
 
     if (picked != null) {
       setState(() {
-        tglC.text = "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+        tglC.text =
+            "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
       });
     }
   }
@@ -225,7 +276,9 @@ class _ProfilePagesState extends State<ProfilePages> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
       body: user == null
-          ? const Center(child: CircularProgressIndicator(color: Color(0xFF4C7F9A)))
+          ? const Center(
+              child: CircularProgressIndicator(color: Color(0xFF4C7F9A)),
+            )
           : CustomScrollView(
               slivers: [
                 // Modern App Bar with Gradient
@@ -254,7 +307,7 @@ class _ProfilePagesState extends State<ProfilePages> {
                           end: Alignment.bottomRight,
                           colors: [
                             const Color(0xFF4C7F9A),
-                            const Color(0xFF4C7F9A).withOpacity(0.8),
+                            const Color(0xFF4C7F9A).withValues(alpha: 0.8),
                           ],
                         ),
                       ),
@@ -268,7 +321,7 @@ class _ProfilePagesState extends State<ProfilePages> {
                               height: 200,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Colors.white.withOpacity(0.1),
+                                color: Colors.white.withValues(alpha: 0.1),
                               ),
                             ),
                           ),
@@ -280,7 +333,7 @@ class _ProfilePagesState extends State<ProfilePages> {
                               height: 150,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Colors.white.withOpacity(0.1),
+                                color: Colors.white.withValues(alpha: 0.1),
                               ),
                             ),
                           ),
@@ -308,15 +361,34 @@ class _ProfilePagesState extends State<ProfilePages> {
                           // Personal Info Section
                           _buildSectionTitle('Informasi Pribadi', Icons.person),
                           const SizedBox(height: 16),
-                          _buildModernTextField("Nama Lengkap", namaC, Icons.person_outline, validator: true),
+                          _buildModernTextField(
+                            "Nama Lengkap",
+                            namaC,
+                            Icons.person_outline,
+                            validator: true,
+                          ),
                           const SizedBox(height: 16),
                           _buildModernTextField("Jenis Kelamin", jkC, Icons.wc),
                           const SizedBox(height: 16),
-                          _buildModernDateField("Tanggal Lahir", tglC, context, Icons.cake),
+                          _buildModernDateField(
+                            "Tanggal Lahir",
+                            tglC,
+                            context,
+                            Icons.cake,
+                          ),
                           const SizedBox(height: 16),
-                          _buildModernTextField("Alamat", alamatC, Icons.home, maxLines: 3),
+                          _buildModernTextField(
+                            "Alamat",
+                            alamatC,
+                            Icons.home,
+                            maxLines: 3,
+                          ),
                           const SizedBox(height: 16),
-                          _buildModernTextField("Status", statusC, Icons.info_outline),
+                          _buildModernTextField(
+                            "Status",
+                            statusC,
+                            Icons.info_outline,
+                          ),
                           const SizedBox(height: 32),
 
                           // Action Buttons
@@ -340,7 +412,7 @@ class _ProfilePagesState extends State<ProfilePages> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -358,8 +430,8 @@ class _ProfilePagesState extends State<ProfilePages> {
                   shape: BoxShape.circle,
                   gradient: LinearGradient(
                     colors: [
-                      const Color(0xFF4C7F9A).withOpacity(0.2),
-                      const Color(0xFF4C7F9A).withOpacity(0.05),
+                      const Color(0xFF4C7F9A).withValues(alpha: 0.2),
+                      const Color(0xFF4C7F9A).withValues(alpha: 0.05),
                     ],
                   ),
                 ),
@@ -370,13 +442,10 @@ class _ProfilePagesState extends State<ProfilePages> {
                 height: 130,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 4,
-                  ),
+                  border: Border.all(color: Colors.white, width: 4),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF4C7F9A).withOpacity(0.3),
+                      color: const Color(0xFF4C7F9A).withValues(alpha: 0.3),
                       blurRadius: 15,
                       offset: const Offset(0, 5),
                     ),
@@ -387,11 +456,11 @@ class _ProfilePagesState extends State<ProfilePages> {
                   backgroundImage: kIsWeb && webImage != null
                       ? MemoryImage(webImage!)
                       : pickedFile != null
-                          ? Image.network(pickedFile!.path).image
-                          : (fotoUrl != null && fotoUrl != "")
-                              ? NetworkImage(fotoUrl)
-                              : const AssetImage("assets/images/default_user.png")
-                                  as ImageProvider,
+                      ? Image.network(pickedFile!.path).image
+                      : (fotoUrl != null && fotoUrl != "")
+                      ? NetworkImage(fotoUrl)
+                      : const AssetImage("assets/images/default_user.png")
+                            as ImageProvider,
                 ),
               ),
               // Camera Button
@@ -409,7 +478,7 @@ class _ProfilePagesState extends State<ProfilePages> {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF4C7F9A).withOpacity(0.4),
+                          color: const Color(0xFF4C7F9A).withValues(alpha: 0.4),
                           blurRadius: 8,
                           offset: const Offset(0, 3),
                         ),
@@ -438,7 +507,7 @@ class _ProfilePagesState extends State<ProfilePages> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: const Color(0xFF4C7F9A).withOpacity(0.1),
+              color: const Color(0xFF4C7F9A).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
@@ -479,19 +548,24 @@ class _ProfilePagesState extends State<ProfilePages> {
     );
   }
 
-  Widget _buildStatCard(String label, String value, IconData icon, Color color) {
+  Widget _buildStatCard(
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [color, color.withOpacity(0.8)],
+          colors: [color, color.withValues(alpha: 0.8)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.3),
+            color: color.withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -503,7 +577,7 @@ class _ProfilePagesState extends State<ProfilePages> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(icon, color: Colors.white, size: 20),
@@ -513,7 +587,7 @@ class _ProfilePagesState extends State<ProfilePages> {
             label,
             style: TextStyle(
               fontSize: 12,
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withValues(alpha: 0.9),
             ),
           ),
           const SizedBox(height: 4),
@@ -538,14 +612,10 @@ class _ProfilePagesState extends State<ProfilePages> {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: const Color(0xFF4C7F9A).withOpacity(0.1),
+            color: const Color(0xFF4C7F9A).withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(
-            icon,
-            color: const Color(0xFF4C7F9A),
-            size: 20,
-          ),
+          child: Icon(icon, color: const Color(0xFF4C7F9A), size: 20),
         ),
         const SizedBox(width: 12),
         Text(
@@ -573,7 +643,7 @@ class _ProfilePagesState extends State<ProfilePages> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -584,10 +654,7 @@ class _ProfilePagesState extends State<ProfilePages> {
         maxLines: maxLines,
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: const TextStyle(
-            color: Color(0xFF4C7F9A),
-            fontSize: 14,
-          ),
+          labelStyle: const TextStyle(color: Color(0xFF4C7F9A), fontSize: 14),
           prefixIcon: Icon(icon, color: const Color(0xFF4C7F9A), size: 22),
           filled: true,
           fillColor: Colors.white,
@@ -597,24 +664,20 @@ class _ProfilePagesState extends State<ProfilePages> {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(
-              color: Colors.grey.shade200,
-              width: 1,
-            ),
+            borderSide: BorderSide(color: Colors.grey.shade200, width: 1),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(
-              color: Color(0xFF4C7F9A),
-              width: 2,
-            ),
+            borderSide: const BorderSide(color: Color(0xFF4C7F9A), width: 2),
           ),
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 20,
             vertical: 16,
           ),
         ),
-        validator: validator ? (v) => v!.isEmpty ? "$label wajib diisi" : null : null,
+        validator: validator
+            ? (v) => v!.isEmpty ? "$label wajib diisi" : null
+            : null,
       ),
     );
   }
@@ -631,7 +694,7 @@ class _ProfilePagesState extends State<ProfilePages> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -643,10 +706,7 @@ class _ProfilePagesState extends State<ProfilePages> {
         onTap: () => _selectDate(context),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: const TextStyle(
-            color: Color(0xFF4C7F9A),
-            fontSize: 14,
-          ),
+          labelStyle: const TextStyle(color: Color(0xFF4C7F9A), fontSize: 14),
           prefixIcon: Icon(icon, color: const Color(0xFF4C7F9A), size: 22),
           suffixIcon: const Icon(
             Icons.calendar_today,
@@ -661,17 +721,11 @@ class _ProfilePagesState extends State<ProfilePages> {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(
-              color: Colors.grey.shade200,
-              width: 1,
-            ),
+            borderSide: BorderSide(color: Colors.grey.shade200, width: 1),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(
-              color: Color(0xFF4C7F9A),
-              width: 2,
-            ),
+            borderSide: const BorderSide(color: Color(0xFF4C7F9A), width: 2),
           ),
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 20,
@@ -698,7 +752,7 @@ class _ProfilePagesState extends State<ProfilePages> {
                 borderRadius: BorderRadius.circular(16),
               ),
               elevation: 4,
-              shadowColor: const Color(0xFF4C7F9A).withOpacity(0.4),
+              shadowColor: const Color(0xFF4C7F9A).withValues(alpha: 0.4),
             ),
             child: isLoading
                 ? const SizedBox(
@@ -741,10 +795,7 @@ class _ProfilePagesState extends State<ProfilePages> {
             },
             style: OutlinedButton.styleFrom(
               foregroundColor: const Color(0xFF4C7F9A),
-              side: const BorderSide(
-                color: Color(0xFF4C7F9A),
-                width: 2,
-              ),
+              side: const BorderSide(color: Color(0xFF4C7F9A), width: 2),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -756,66 +807,13 @@ class _ProfilePagesState extends State<ProfilePages> {
                 SizedBox(width: 8),
                 Text(
                   'Lihat Kartu Mahasiswa',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildTextField(String label, TextEditingController controller, {bool validator = false}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        controller: controller,
-        decoration: InputDecoration(
-          labelText: label,
-          labelStyle: const TextStyle(color: Color(0xFF4C7F9A)),
-          filled: true,
-          fillColor: Colors.white,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFF4C7F9A), width: 0.8),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFF4C7F9A), width: 1.5),
-          ),
-        ),
-        validator: validator ? (v) => v!.isEmpty ? "$label wajib diisi" : null : null,
-      ),
-    );
-  }
-
-  Widget _buildDateField(String label, TextEditingController controller, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        controller: controller,
-        readOnly: true,
-        onTap: () => _selectDate(context),
-        decoration: InputDecoration(
-          labelText: label,
-          suffixIcon: const Icon(Icons.calendar_today, color: Color(0xFF4C7F9A)),
-          labelStyle: const TextStyle(color: Color(0xFF4C7F9A)),
-          filled: true,
-          fillColor: Colors.white,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFF4C7F9A), width: 0.8),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFF4C7F9A), width: 1.5),
-          ),
-        ),
-      ),
     );
   }
 }

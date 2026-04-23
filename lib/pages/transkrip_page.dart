@@ -43,7 +43,7 @@ class TranskripPage extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [primaryColor, primaryColor.withOpacity(0.8)],
+                  colors: [primaryColor, primaryColor.withValues(alpha: 0.8)],
                 ),
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(30),
@@ -98,7 +98,7 @@ class TranskripPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, -2),
                   ),
@@ -154,42 +154,58 @@ class TranskripPage extends StatelessWidget {
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                              onPressed: () async {
-                                // Generate simple PDF and open print dialog
-                                final pdf = pw.Document();
-                                pdf.addPage(
-                                  pw.MultiPage(
-                                    pageFormat: PdfPageFormat.a4,
-                                    build: (pw.Context ctx) {
-                                      return [
-                                        pw.Header(
-                                            level: 0,
-                                            child: pw.Text('Transkrip Nilai',
-                                                style: pw.TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: pw.FontWeight.bold))),
-                                        pw.SizedBox(height: 8),
-                                        pw.Table.fromTextArray(
-                                          headers: ['Mata Kuliah', 'SKS', 'Nilai'],
-                                          data: dummyCourses
-                                              .map((c) => [c['matkul'], c['sks'].toString(), c['nilai']])
-                                              .toList(),
+                          onPressed: () async {
+                            // Generate simple PDF and open print dialog
+                            final pdf = pw.Document();
+                            pdf.addPage(
+                              pw.MultiPage(
+                                pageFormat: PdfPageFormat.a4,
+                                build: (pw.Context ctx) {
+                                  return [
+                                    pw.Header(
+                                      level: 0,
+                                      child: pw.Text(
+                                        'Transkrip Nilai',
+                                        style: pw.TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: pw.FontWeight.bold,
                                         ),
-                                        pw.SizedBox(height: 12),
-                                        pw.Row(
-                                            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              pw.Text('Total SKS: $totalSKS'),
-                                              pw.Text('IPK Semester: ${ipk.toStringAsFixed(2)}'),
-                                            ]),
-                                      ];
-                                    },
-                                  ),
-                                );
+                                      ),
+                                    ),
+                                    pw.SizedBox(height: 8),
+                                    pw.TableHelper.fromTextArray(
+                                      headers: ['Mata Kuliah', 'SKS', 'Nilai'],
+                                      data: dummyCourses
+                                          .map(
+                                            (c) => [
+                                              c['matkul'],
+                                              c['sks'].toString(),
+                                              c['nilai'],
+                                            ],
+                                          )
+                                          .toList(),
+                                    ),
+                                    pw.SizedBox(height: 12),
+                                    pw.Row(
+                                      mainAxisAlignment:
+                                          pw.MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        pw.Text('Total SKS: $totalSKS'),
+                                        pw.Text(
+                                          'IPK Semester: ${ipk.toStringAsFixed(2)}',
+                                        ),
+                                      ],
+                                    ),
+                                  ];
+                                },
+                              ),
+                            );
 
-                                await Printing.layoutPdf(
-                                    onLayout: (PdfPageFormat format) async => pdf.save());
-                              },
+                            await Printing.layoutPdf(
+                              onLayout: (PdfPageFormat format) async =>
+                                  pdf.save(),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFE74C3C),
                             foregroundColor: Colors.white,
@@ -219,32 +235,49 @@ class TranskripPage extends StatelessWidget {
                                 build: (pw.Context ctx) {
                                   return [
                                     pw.Header(
-                                        level: 0,
-                                        child: pw.Text('Transkrip Nilai',
-                                            style: pw.TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: pw.FontWeight.bold))),
+                                      level: 0,
+                                      child: pw.Text(
+                                        'Transkrip Nilai',
+                                        style: pw.TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: pw.FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
                                     pw.SizedBox(height: 8),
-                                    pw.Table.fromTextArray(
+                                    pw.TableHelper.fromTextArray(
                                       headers: ['Mata Kuliah', 'SKS', 'Nilai'],
                                       data: dummyCourses
-                                          .map((c) => [c['matkul'], c['sks'].toString(), c['nilai']])
+                                          .map(
+                                            (c) => [
+                                              c['matkul'],
+                                              c['sks'].toString(),
+                                              c['nilai'],
+                                            ],
+                                          )
                                           .toList(),
                                     ),
                                     pw.SizedBox(height: 12),
                                     pw.Row(
-                                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          pw.Text('Total SKS: $totalSKS'),
-                                          pw.Text('IPK Semester: ${ipk.toStringAsFixed(2)}'),
-                                        ]),
+                                      mainAxisAlignment:
+                                          pw.MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        pw.Text('Total SKS: $totalSKS'),
+                                        pw.Text(
+                                          'IPK Semester: ${ipk.toStringAsFixed(2)}',
+                                        ),
+                                      ],
+                                    ),
                                   ];
                                 },
                               ),
                             );
 
                             final bytes = await pdf.save();
-                            await Printing.sharePdf(bytes: bytes, filename: 'transkrip.pdf');
+                            await Printing.sharePdf(
+                              bytes: bytes,
+                              filename: 'transkrip.pdf',
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: primaryColor,
@@ -289,7 +322,7 @@ class TranskripPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -315,7 +348,7 @@ class TranskripPage extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: primaryColor.withOpacity(0.1),
+              color: primaryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(

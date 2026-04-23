@@ -45,13 +45,13 @@ class _PengajuanSuratPageState extends State<PengajuanSuratPage> {
       setState(() {
         _riwayatPengajuan.insert(0, {
           "jenis": _selectedJenisSurat!,
-          "tanggal": "Hari ini", 
+          "tanggal": "Hari ini",
           "status": "Proses",
         });
         _keteranganController.clear();
         _selectedJenisSurat = null;
       });
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Permohonan berhasil diajukan"),
@@ -91,8 +91,8 @@ class _PengajuanSuratPageState extends State<PengajuanSuratPage> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
-                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -112,14 +112,19 @@ class _PengajuanSuratPageState extends State<PengajuanSuratPage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    
+
                     // Dropdown Jenis Surat
                     DropdownButtonFormField<String>(
-                      value: _selectedJenisSurat,
+                      initialValue: _selectedJenisSurat,
                       decoration: InputDecoration(
                         labelText: "Jenis Surat",
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
                       ),
                       items: _jenisSuratOptions.map((String value) {
                         return DropdownMenuItem<String>(
@@ -127,8 +132,10 @@ class _PengajuanSuratPageState extends State<PengajuanSuratPage> {
                           child: Text(value),
                         );
                       }).toList(),
-                      onChanged: (val) => setState(() => _selectedJenisSurat = val),
-                      validator: (val) => val == null ? 'Pilih jenis surat' : null,
+                      onChanged: (val) =>
+                          setState(() => _selectedJenisSurat = val),
+                      validator: (val) =>
+                          val == null ? 'Pilih jenis surat' : null,
                     ),
                     const SizedBox(height: 16),
 
@@ -138,10 +145,13 @@ class _PengajuanSuratPageState extends State<PengajuanSuratPage> {
                       maxLines: 3,
                       decoration: InputDecoration(
                         labelText: "Keterangan / Keperluan",
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         alignLabelWithHint: true,
                       ),
-                      validator: (val) => val!.isEmpty ? 'Isi keterangan' : null,
+                      validator: (val) =>
+                          val!.isEmpty ? 'Isi keterangan' : null,
                     ),
                     const SizedBox(height: 20),
 
@@ -166,11 +176,11 @@ class _PengajuanSuratPageState extends State<PengajuanSuratPage> {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 30),
             const Text(
               "Riwayat Pengajuan Saya",
-               style: TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF4C7F9A),
@@ -180,63 +190,92 @@ class _PengajuanSuratPageState extends State<PengajuanSuratPage> {
 
             // List Riwayat
             if (_riwayatPengajuan.isEmpty)
-              const Center(child: Text("Belum ada pengajuan", style: TextStyle(color: Colors.grey)))
+              const Center(
+                child: Text(
+                  "Belum ada pengajuan",
+                  style: TextStyle(color: Colors.grey),
+                ),
+              )
             else
-              ..._riwayatPengajuan.map((item) => Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey.shade200),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: item["status"] == "Selesai" 
-                            ? Colors.green.shade50 
-                            : Colors.orange.shade50,
-                        shape: BoxShape.circle,
+              ..._riwayatPengajuan.map(
+                (item) => Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey.shade200),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: item["status"] == "Selesai"
+                              ? Colors.green.shade50
+                              : Colors.orange.shade50,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          item["status"] == "Selesai"
+                              ? Icons.check_circle
+                              : Icons.access_time_filled,
+                          color: item["status"] == "Selesai"
+                              ? Colors.green
+                              : Colors.orange,
+                          size: 20,
+                        ),
                       ),
-                      child: Icon(
-                        item["status"] == "Selesai" ? Icons.check_circle : Icons.access_time_filled,
-                        color: item["status"] == "Selesai" ? Colors.green : Colors.orange,
-                        size: 20,
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item["jenis"]!,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              item["tanggal"]!,
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            item["jenis"]!,
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: item["status"] == "Selesai"
+                              ? Colors.green
+                              : Colors.orange,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          item["status"]!,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            item["tanggal"]!,
-                            style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: item["status"] == "Selesai" ? Colors.green : Colors.orange,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        item["status"]!,
-                        style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              )).toList(),
+              ),
           ],
         ),
       ),

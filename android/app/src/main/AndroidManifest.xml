@@ -1,4 +1,10 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="erichfromm.com">
+    <!-- Permissions for location features -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-feature android:name="android.hardware.location.gps" />
+
     <!-- Permissions for calendar features -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.READ_CALENDAR"/>
@@ -12,7 +18,7 @@
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true">
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.siakad.MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:taskAffinity=""

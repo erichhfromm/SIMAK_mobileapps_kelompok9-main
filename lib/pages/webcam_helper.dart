@@ -1,8 +1,8 @@
-// ignore_for_file: avoid_web_libraries_in_flutter
+// ignore_for_file: avoid_web_libraries_in_flutter, deprecated_member_use
 import 'dart:async';
 import 'dart:html' as html;
-import 'dart:typed_data';
 import 'dart:ui_web' as ui;
+import 'package:flutter/foundation.dart';
 
 // Interface untuk kamera
 abstract class ICamera {
@@ -36,14 +36,15 @@ class WebCamera implements ICamera {
     );
 
     try {
-      final stream = await html.window.navigator.mediaDevices!
-          .getUserMedia({'video': {'facingMode': 'user'}});
+      final stream = await html.window.navigator.mediaDevices!.getUserMedia({
+        'video': {'facingMode': 'user'},
+      });
       _video!.srcObject = stream;
       await _video!.play();
       _isInitialized = true;
-      print("✅ Kamera berhasil diinisialisasi (Web)");
+      debugPrint("✅ Kamera berhasil diinisialisasi (Web)");
     } catch (e) {
-      print("❌ Gagal akses kamera: $e");
+      debugPrint("❌ Gagal akses kamera: $e");
       rethrow;
     }
   }

@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_web_libraries_in_flutter, deprecated_member_use
 import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
@@ -34,7 +35,7 @@ class WebCamera implements ICamera {
     _canvas = CanvasElement();
     _isInitialized = true;
 
-    print("💻 Kamera Web berhasil diinisialisasi");
+    debugPrint("💻 Kamera Web berhasil diinisialisasi");
   }
 
   @override

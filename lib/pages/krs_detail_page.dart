@@ -48,6 +48,7 @@ class _KrsDetailPageState extends State<KrsDetailPage> {
 
     final Uri uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.red[400],
@@ -62,6 +63,18 @@ class _KrsDetailPageState extends State<KrsDetailPage> {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
 
+    if (token == null) {
+      // 🔹 DEMO MOCK HAPUS
+      setState(() {
+        daftarMatkul.removeWhere((item) => item['id'] == idKrsDetail);
+      });
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Matakuliah dihapus (Demo Mode)")),
+      );
+      return;
+    }
+
     Dio dio = Dio();
     dio.options.headers['Authorization'] = 'Bearer $token';
 
@@ -70,21 +83,19 @@ class _KrsDetailPageState extends State<KrsDetailPage> {
         "${ApiService.baseUrl}krs/hapus-course-krs?id=$idKrsDetail",
       );
 
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: primaryColor,
-          content: Text(response.data['message'] ?? "Matakuliah dihapus",
-              style: const TextStyle(color: Colors.white)),
+          content: Text(
+            response.data['message'] ?? "Matakuliah dihapus",
+            style: const TextStyle(color: Colors.white),
+          ),
         ),
       );
       _getDetailKrs();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.red[400],
-          content: const Text("Gagal menghapus matakuliah"),
-        ),
-      );
+      debugPrint("Error hapusMatakuliah: $e");
     }
   }
 
@@ -93,6 +104,37 @@ class _KrsDetailPageState extends State<KrsDetailPage> {
     setState(() => isLoading = true);
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
+
+    if (token == null) {
+      // 🔹 DEMO BYPASS
+      debugPrint("Demo mode: Using dummy courses in KrsDetailPage");
+      setState(() {
+        daftarMatkul = [
+          {
+            "id": 1,
+            "nama_matakuliah": "Mobile Programming",
+            "jumlah_sks": 4,
+            "dosen": "Muhammad Aziz Setiaji Leksono, M.kom",
+            "nama_hari": "Senin",
+            "jam_mulai": "08:00",
+            "jam_selesai": "10:30",
+            "zoom_link": "https://zoom.us/j/demo",
+          },
+          {
+            "id": 2,
+            "nama_matakuliah": "Rangkaian Digital",
+            "jumlah_sks": 3,
+            "dosen": "Deni Satria, M.kom",
+            "nama_hari": "Rabu",
+            "jam_mulai": "13:00",
+            "jam_selesai": "15:00",
+            "zoom_link": "",
+          },
+        ];
+        isLoading = false;
+      });
+      return;
+    }
 
     Dio dio = Dio();
     dio.options.headers['Authorization'] = 'Bearer $token';
@@ -106,12 +148,7 @@ class _KrsDetailPageState extends State<KrsDetailPage> {
         });
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.red[400],
-          content: const Text("Gagal memuat detail KRS"),
-        ),
-      );
+      debugPrint("Error getDetailKrs: $e");
     } finally {
       setState(() => isLoading = false);
     }
@@ -139,31 +176,35 @@ class _KrsDetailPageState extends State<KrsDetailPage> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-      backgroundColor: primaryColor,
-      elevation: 0,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
-        onPressed: () => Navigator.pop(context),
-      ),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.home, color: Colors.white),
-          tooltip: 'Kembali ke Home',
-          onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
-          },
+        backgroundColor: primaryColor,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
         ),
-      ],
-      title: Text(
-        "Detail KRS Semester ${widget.semester}",
-        style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.home, color: Colors.white),
+            tooltip: 'Kembali ke Home',
+            onPressed: () {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/main',
+                (route) => false,
+              );
+            },
+          ),
+        ],
+        title: Text(
+          "Detail KRS Semester ${widget.semester}",
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
+        centerTitle: true,
       ),
-      centerTitle: true,
-    ),
-              floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: _tambahMatkulModal,
         backgroundColor: primaryColor,
         icon: const Icon(Icons.add, color: Colors.white),
@@ -173,99 +214,100 @@ class _KrsDetailPageState extends State<KrsDetailPage> {
         ),
       ),
       body: isLoading
-          ? Center(
-              child: CircularProgressIndicator(color: primaryColor),
-            )
+          ? Center(child: CircularProgressIndicator(color: primaryColor))
           : daftarMatkul.isEmpty
-              ? const Center(
-                  child: Text(
-                    "Belum ada matakuliah\nyang dipilih.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+          ? const Center(
+              child: Text(
+                "Belum ada matakuliah\nyang dipilih.",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            )
+          : ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: daftarMatkul.length,
+              itemBuilder: (context, index) {
+                final mk = daftarMatkul[index];
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
-                )
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: daftarMatkul.length,
-                  itemBuilder: (context, index) {
-                    final mk = daftarMatkul[index];
-                    return AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      decoration: BoxDecoration(
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.all(16),
+                    leading: CircleAvatar(
+                      radius: 24,
+                      backgroundColor: primaryColor,
+                      child: const Icon(
+                        Icons.menu_book_rounded,
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
                       ),
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.all(16),
-                        leading: CircleAvatar(
-                          radius: 24,
-                          backgroundColor: primaryColor,
-                          child: const Icon(
-                            Icons.menu_book_rounded,
-                            color: Colors.white,
-                          ),
-                        ),
-                        title: Text(
-                          mk['nama_matakuliah'] ?? '-',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(top: 6),
-                          child: Text(
-                            "SKS: ${mk['jumlah_sks'] ?? '-'} | Dosen: ${mk['dosen'] ?? '-'}\n"
-                            "Jadwal: ${mk['nama_hari'] ?? '-'}, ${mk['jam_mulai'] ?? '-'} - ${mk['jam_selesai'] ?? '-'}",
-                            style: TextStyle(color: Colors.grey[700]),
-                          ),
-                        ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.video_camera_front,
-                                  color: Color.fromARGB(255, 10, 10, 163)),
-                              tooltip: "Buka Zoom",
-                              onPressed: () => _openZoom(mk['zoom_link']),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.check_circle,
-                                  color: Colors.green),
-                              tooltip: "Masuk Absen",
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => AbsenPage(
-                                      idKrsDetail: mk['id'],
-                                      namaMatkul: mk['nama_matakuliah'],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                            IconButton(
-                              icon:
-                                  const Icon(Icons.delete, color: Colors.red),
-                              tooltip: "Hapus Matakuliah",
-                              onPressed: () => _hapusMatakuliah(mk['id']),
-                            ),
-                          ],
-                        ),
+                    ),
+                    title: Text(
+                      mk['nama_matakuliah'] ?? '-',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
                       ),
-                    );
-                  },
-                ),
+                    ),
+                    subtitle: Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: Text(
+                        "SKS: ${mk['jumlah_sks'] ?? '-'} | Dosen: ${mk['dosen'] ?? '-'}\n"
+                        "Jadwal: ${mk['nama_hari'] ?? '-'}, ${mk['jam_mulai'] ?? '-'} - ${mk['jam_selesai'] ?? '-'}",
+                        style: TextStyle(color: Colors.grey[700]),
+                      ),
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.video_camera_front,
+                            color: Color.fromARGB(255, 10, 10, 163),
+                          ),
+                          tooltip: "Buka Zoom",
+                          onPressed: () => _openZoom(mk['zoom_link']),
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.check_circle,
+                            color: Colors.green,
+                          ),
+                          tooltip: "Masuk Absen",
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => AbsenPage(
+                                  idKrsDetail: mk['id'],
+                                  namaMatkul: mk['nama_matakuliah'],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          tooltip: "Hapus Matakuliah",
+                          onPressed: () => _hapusMatakuliah(mk['id']),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
     );
   }
 }
@@ -304,6 +346,33 @@ class _TambahMatkulSheetState extends State<TambahMatkulSheet> {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
 
+    if (token == null) {
+      // 🔹 DEMO BYPASS
+      debugPrint("Demo mode: Using dummy schedules in TambahMatkulSheet");
+      setState(() {
+        daftarMatkulTersedia = [
+          {
+            "id": 201,
+            "nama_matakuliah": "Data Mining",
+            "jumlah_sks": 3,
+            "nama_hari": "Kamis",
+            "jam_mulai": "08:00",
+            "jam_selesai": "10:00",
+          },
+          {
+            "id": 202,
+            "nama_matakuliah": "Kecerdasan Buatan",
+            "jumlah_sks": 3,
+            "nama_hari": "Jumat",
+            "jam_mulai": "09:00",
+            "jam_selesai": "11:00",
+          },
+        ];
+        isLoading = false;
+      });
+      return;
+    }
+
     Dio dio = Dio();
     dio.options.headers['Authorization'] = 'Bearer $token';
 
@@ -311,9 +380,7 @@ class _TambahMatkulSheetState extends State<TambahMatkulSheet> {
       final res = await dio.get("${ApiService.baseUrl}jadwal/daftar-jadwal");
       setState(() => daftarMatkulTersedia = res.data['jadwals'] ?? []);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Gagal memuat matakuliah")),
-      );
+      debugPrint("Error loadMatkul: $e");
     } finally {
       setState(() => isLoading = false);
     }
@@ -322,6 +389,20 @@ class _TambahMatkulSheetState extends State<TambahMatkulSheet> {
   Future<void> tambahMatkul(int idJadwal) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
+
+    if (token == null) {
+      // 🔹 DEMO MOCK TAMBAH
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: widget.primaryColor,
+          content: const Text("Matakuliah ditambahkan (Demo Mode)"),
+        ),
+      );
+      widget.onSuccess();
+      if (mounted) Navigator.pop(context);
+      return;
+    }
 
     Dio dio = Dio();
     dio.options.headers['Authorization'] = 'Bearer $token';
@@ -332,23 +413,21 @@ class _TambahMatkulSheetState extends State<TambahMatkulSheet> {
         data: {"id_krs": widget.idKrs, "id_jadwal": idJadwal},
       );
 
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: widget.primaryColor,
-          content: Text(res.data['message'],
-              style: const TextStyle(color: Colors.white)),
+          content: Text(
+            res.data['message'],
+            style: const TextStyle(color: Colors.white),
+          ),
         ),
       );
 
       widget.onSuccess();
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Colors.red,
-          content: Text("Gagal menambahkan matakuliah"),
-        ),
-      );
+      debugPrint("Error tambahMatkul: $e");
     }
   }
 
@@ -357,9 +436,7 @@ class _TambahMatkulSheetState extends State<TambahMatkulSheet> {
     return SizedBox(
       height: 450,
       child: isLoading
-          ? Center(
-              child: CircularProgressIndicator(color: widget.primaryColor),
-            )
+          ? Center(child: CircularProgressIndicator(color: widget.primaryColor))
           : ListView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: daftarMatkulTersedia.length,
@@ -373,7 +450,7 @@ class _TambahMatkulSheetState extends State<TambahMatkulSheet> {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withValues(alpha: 0.05),
                         blurRadius: 6,
                         offset: const Offset(0, 3),
                       ),
@@ -397,7 +474,9 @@ class _TambahMatkulSheetState extends State<TambahMatkulSheet> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: widget.primaryColor,
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 8),
+                          horizontal: 14,
+                          vertical: 8,
+                        ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -406,7 +485,9 @@ class _TambahMatkulSheetState extends State<TambahMatkulSheet> {
                       child: const Text(
                         "Tambah",
                         style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),

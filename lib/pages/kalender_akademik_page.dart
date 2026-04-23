@@ -39,8 +39,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Perkuliahan semester genap dimulai untuk semua program.',
         'type': 'academic',
         'location': 'Kampus Utama',
-        'time': '08:00 - 17:00'
-      }
+        'time': '08:00 - 17:00',
+      },
     ],
     DateTime(2025, 1, 20): [
       {
@@ -48,8 +48,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Deadline untuk melakukan perubahan KRS semester genap.',
         'type': 'registration',
         'location': 'Online - SIMAK',
-        'time': '23:59'
-      }
+        'time': '23:59',
+      },
     ],
     DateTime(2025, 2, 10): [
       {
@@ -57,8 +57,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Seminar nasional dengan tema teknologi dan inovasi.',
         'type': 'academic',
         'location': 'Auditorium Kampus',
-        'time': '09:00 - 15:00'
-      }
+        'time': '09:00 - 15:00',
+      },
     ],
     DateTime(2025, 2, 15): [
       {
@@ -66,8 +66,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Mahasiswa melakukan pengisian KRS via sistem SIMAK.',
         'type': 'registration',
         'location': 'Online - SIMAK',
-        'time': '00:00 - 23:59'
-      }
+        'time': '00:00 - 23:59',
+      },
     ],
     DateTime(2025, 2, 20): [
       {
@@ -75,8 +75,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Deadline pembayaran UKT semester genap.',
         'type': 'payment',
         'location': 'Bank/Virtual Account',
-        'time': '23:59'
-      }
+        'time': '23:59',
+      },
     ],
     DateTime(2025, 3, 15): [
       {
@@ -84,8 +84,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'UTS berlangsung selama satu minggu untuk semua mata kuliah.',
         'type': 'exam',
         'location': 'Ruang Ujian Kampus',
-        'time': '08:00 - 16:00'
-      }
+        'time': '08:00 - 16:00',
+      },
     ],
     DateTime(2025, 3, 28): [
       {
@@ -93,8 +93,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Libur nasional Hari Raya Nyepi.',
         'type': 'holiday',
         'location': '-',
-        'time': 'Sepanjang Hari'
-      }
+        'time': 'Sepanjang Hari',
+      },
     ],
     DateTime(2025, 4, 1): [
       {
@@ -102,17 +102,18 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Libur nasional, perkuliahan libur.',
         'type': 'holiday',
         'location': '-',
-        'time': 'Sepanjang Hari'
-      }
+        'time': 'Sepanjang Hari',
+      },
     ],
     DateTime(2025, 4, 18): [
       {
         'title': 'Workshop Pengembangan Karir',
-        'desc': 'Workshop untuk mahasiswa tingkat akhir tentang persiapan karir.',
+        'desc':
+            'Workshop untuk mahasiswa tingkat akhir tentang persiapan karir.',
         'type': 'academic',
         'location': 'Ruang Seminar Lt. 3',
-        'time': '13:00 - 16:00'
-      }
+        'time': '13:00 - 16:00',
+      },
     ],
     DateTime(2025, 5, 1): [
       {
@@ -120,8 +121,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Libur nasional.',
         'type': 'holiday',
         'location': '-',
-        'time': 'Sepanjang Hari'
-      }
+        'time': 'Sepanjang Hari',
+      },
     ],
     DateTime(2025, 5, 15): [
       {
@@ -129,8 +130,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Upacara wisuda untuk lulusan periode Februari 2025.',
         'type': 'academic',
         'location': 'Auditorium Utama',
-        'time': '09:00 - 14:00'
-      }
+        'time': '09:00 - 14:00',
+      },
     ],
     DateTime(2025, 5, 29): [
       {
@@ -138,8 +139,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Libur nasional.',
         'type': 'holiday',
         'location': '-',
-        'time': 'Sepanjang Hari'
-      }
+        'time': 'Sepanjang Hari',
+      },
     ],
     DateTime(2025, 6, 1): [
       {
@@ -147,8 +148,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Peringatan Hari Lahir Pancasila.',
         'type': 'holiday',
         'location': 'Kampus',
-        'time': '08:00 - 12:00'
-      }
+        'time': '08:00 - 12:00',
+      },
     ],
     DateTime(2025, 6, 10): [
       {
@@ -156,8 +157,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'UAS berlangsung selama dua minggu.',
         'type': 'exam',
         'location': 'Ruang Ujian Kampus',
-        'time': '08:00 - 16:00'
-      }
+        'time': '08:00 - 16:00',
+      },
     ],
     DateTime(2025, 6, 25): [
       {
@@ -165,8 +166,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Pengumuman nilai akhir semester genap.',
         'type': 'academic',
         'location': 'Online - SIMAK',
-        'time': '10:00'
-      }
+        'time': '10:00',
+      },
     ],
     DateTime(2025, 7, 1): [
       {
@@ -174,8 +175,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Libur semester genap dimulai.',
         'type': 'holiday',
         'location': '-',
-        'time': 'Sepanjang Hari'
-      }
+        'time': 'Sepanjang Hari',
+      },
     ],
     DateTime(2025, 7, 15): [
       {
@@ -183,8 +184,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Periode pendaftaran mahasiswa baru tahun ajaran 2025/2026.',
         'type': 'registration',
         'location': 'Online & Kampus',
-        'time': '08:00 - 16:00'
-      }
+        'time': '08:00 - 16:00',
+      },
     ],
     DateTime(2025, 8, 17): [
       {
@@ -192,17 +193,18 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Perayaan HUT RI ke-80 dengan upacara bendera.',
         'type': 'holiday',
         'location': 'Lapangan Kampus',
-        'time': '08:00 - 12:00'
-      }
+        'time': '08:00 - 12:00',
+      },
     ],
     DateTime(2025, 8, 25): [
       {
         'title': 'Orientasi Mahasiswa Baru',
-        'desc': 'Kegiatan orientasi dan pengenalan kampus untuk mahasiswa baru.',
+        'desc':
+            'Kegiatan orientasi dan pengenalan kampus untuk mahasiswa baru.',
         'type': 'academic',
         'location': 'Kampus Utama',
-        'time': '07:00 - 17:00'
-      }
+        'time': '07:00 - 17:00',
+      },
     ],
     DateTime(2025, 9, 1): [
       {
@@ -210,8 +212,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Perkuliahan semester ganjil dimulai.',
         'type': 'academic',
         'location': 'Kampus Utama',
-        'time': '08:00 - 17:00'
-      }
+        'time': '08:00 - 17:00',
+      },
     ],
     DateTime(2025, 9, 10): [
       {
@@ -219,8 +221,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Periode pengisian KRS untuk semester ganjil.',
         'type': 'registration',
         'location': 'Online - SIMAK',
-        'time': '00:00 - 23:59'
-      }
+        'time': '00:00 - 23:59',
+      },
     ],
     DateTime(2025, 9, 25): [
       {
@@ -228,8 +230,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Deadline pembayaran UKT semester ganjil.',
         'type': 'payment',
         'location': 'Bank/Virtual Account',
-        'time': '23:59'
-      }
+        'time': '23:59',
+      },
     ],
     DateTime(2025, 10, 15): [
       {
@@ -237,8 +239,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'UTS semester ganjil untuk semua mata kuliah.',
         'type': 'exam',
         'location': 'Ruang Ujian Kampus',
-        'time': '08:00 - 16:00'
-      }
+        'time': '08:00 - 16:00',
+      },
     ],
     DateTime(2025, 10, 28): [
       {
@@ -246,8 +248,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Peringatan Hari Sumpah Pemuda.',
         'type': 'holiday',
         'location': 'Kampus',
-        'time': '08:00 - 12:00'
-      }
+        'time': '08:00 - 12:00',
+      },
     ],
     DateTime(2025, 11, 10): [
       {
@@ -255,8 +257,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Peringatan Hari Pahlawan Nasional.',
         'type': 'holiday',
         'location': 'Kampus',
-        'time': '08:00 - 12:00'
-      }
+        'time': '08:00 - 12:00',
+      },
     ],
     DateTime(2025, 11, 20): [
       {
@@ -264,17 +266,18 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Bursa kerja untuk mahasiswa dan alumni.',
         'type': 'academic',
         'location': 'Hall Utama Kampus',
-        'time': '09:00 - 16:00'
-      }
+        'time': '09:00 - 16:00',
+      },
     ],
     DateTime(2025, 12, 1): [
       {
         'title': 'Pendaftaran Wisuda Periode Februari 2026',
-        'desc': 'Pembukaan pendaftaran wisuda untuk lulusan periode Februari 2026.',
+        'desc':
+            'Pembukaan pendaftaran wisuda untuk lulusan periode Februari 2026.',
         'type': 'registration',
         'location': 'Online - SIMAK',
-        'time': '00:00 - 23:59'
-      }
+        'time': '00:00 - 23:59',
+      },
     ],
     DateTime(2025, 12, 8): [
       {
@@ -282,8 +285,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Seminar proposal skripsi untuk mahasiswa tingkat akhir.',
         'type': 'academic',
         'location': 'Ruang Seminar',
-        'time': '09:00 - 15:00'
-      }
+        'time': '09:00 - 15:00',
+      },
     ],
     DateTime(2025, 12, 15): [
       {
@@ -291,8 +294,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'UAS semester ganjil dimulai.',
         'type': 'exam',
         'location': 'Ruang Ujian Kampus',
-        'time': '08:00 - 16:00'
-      }
+        'time': '08:00 - 16:00',
+      },
     ],
     DateTime(2025, 12, 25): [
       {
@@ -300,8 +303,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Libur nasional Hari Natal.',
         'type': 'holiday',
         'location': '-',
-        'time': 'Sepanjang Hari'
-      }
+        'time': 'Sepanjang Hari',
+      },
     ],
     DateTime(2025, 12, 31): [
       {
@@ -309,8 +312,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         'desc': 'Libur akhir tahun 2025.',
         'type': 'holiday',
         'location': '-',
-        'time': 'Sepanjang Hari'
-      }
+        'time': 'Sepanjang Hari',
+      },
     ],
   };
 
@@ -327,7 +330,9 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
   }
 
   Future<void> _initializeNotifications() async {
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidSettings = AndroidInitializationSettings(
+      '@mipmap/ic_launcher',
+    );
     const iosSettings = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
@@ -357,37 +362,34 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
 
     // Filter by category
     if (_selectedFilter != 'all') {
-      filtered = filtered.map((entry) {
-        final filteredList = entry.value
-            .where((event) => event['type'] == _selectedFilter)
-            .toList();
-        return MapEntry(entry.key, filteredList);
-      }).where((entry) => entry.value.isNotEmpty).toList();
+      filtered = filtered
+          .map((entry) {
+            final filteredList = entry.value
+                .where((event) => event['type'] == _selectedFilter)
+                .toList();
+            return MapEntry(entry.key, filteredList);
+          })
+          .where((entry) => entry.value.isNotEmpty)
+          .toList();
     }
 
     // Filter by search query
     if (_searchQuery.isNotEmpty) {
-      filtered = filtered.map((entry) {
-        final filteredList = entry.value.where((event) {
-          return event['title']!.toLowerCase().contains(_searchQuery) ||
-              event['desc']!.toLowerCase().contains(_searchQuery);
-        }).toList();
-        return MapEntry(entry.key, filteredList);
-      }).where((entry) => entry.value.isNotEmpty).toList();
+      filtered = filtered
+          .map((entry) {
+            final filteredList = entry.value.where((event) {
+              return event['title']!.toLowerCase().contains(_searchQuery) ||
+                  event['desc']!.toLowerCase().contains(_searchQuery);
+            }).toList();
+            return MapEntry(entry.key, filteredList);
+          })
+          .where((entry) => entry.value.isNotEmpty)
+          .toList();
     }
 
     // Sort by date
     filtered.sort((a, b) => a.key.compareTo(b.key));
     return filtered;
-  }
-
-  List<MapEntry<DateTime, List<Map<String, String>>>> _getUpcomingEvents() {
-    final now = DateTime.now();
-    final upcoming = _getFilteredEvents()
-        .where((entry) => entry.key.isAfter(now))
-        .take(10)
-        .toList();
-    return upcoming;
   }
 
   Color _getEventColor(String type) {
@@ -476,8 +478,9 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: _getEventColor(event['type']!)
-                                .withOpacity(0.1),
+                            color: _getEventColor(
+                              event['type']!,
+                            ).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Icon(
@@ -522,11 +525,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
                       DateFormat('EEEE, dd MMMM yyyy', 'id_ID').format(date),
                     ),
                     const SizedBox(height: 16),
-                    _buildDetailRow(
-                      Icons.access_time,
-                      'Waktu',
-                      event['time']!,
-                    ),
+                    _buildDetailRow(Icons.access_time, 'Waktu', event['time']!),
                     const SizedBox(height: 16),
                     _buildDetailRow(
                       Icons.location_on_outlined,
@@ -568,9 +567,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
                             label: const Text('Set Reminder'),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: const Color(0xFF4C7F9A),
-                              side: const BorderSide(
-                                color: Color(0xFF4C7F9A),
-                              ),
+                              side: const BorderSide(color: Color(0xFF4C7F9A)),
                               padding: const EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -616,14 +613,10 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: const Color(0xFF4C7F9A).withOpacity(0.1),
+            color: const Color(0xFF4C7F9A).withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(
-            icon,
-            color: const Color(0xFF4C7F9A),
-            size: 20,
-          ),
+          child: Icon(icon, color: const Color(0xFF4C7F9A), size: 20),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -632,10 +625,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
             children: [
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
               ),
               const SizedBox(height: 2),
               Text(
@@ -660,7 +650,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 8,
-        shadowColor: const Color(0xFF4C7F9A).withOpacity(0.3),
+        shadowColor: const Color(0xFF4C7F9A).withValues(alpha: 0.3),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
@@ -712,10 +702,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [
-          _buildCalendarView(),
-          _buildListView(),
-        ],
+        children: [_buildCalendarView(), _buildListView()],
       ),
     );
   }
@@ -738,7 +725,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF4C7F9A).withOpacity(0.2),
+                  color: const Color(0xFF4C7F9A).withValues(alpha: 0.2),
                   blurRadius: 10,
                   offset: const Offset(0, 5),
                 ),
@@ -749,7 +736,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
@@ -774,10 +761,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
                       SizedBox(height: 4),
                       Text(
                         'Tahun Ajaran 2025–2026',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 14,
-                        ),
+                        style: TextStyle(color: Colors.white70, fontSize: 14),
                       ),
                     ],
                   ),
@@ -796,11 +780,20 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
                 _buildFilterChip('academic', 'Akademik', Icons.school_outlined),
                 _buildFilterChip('exam', 'Ujian', Icons.edit_calendar_outlined),
                 _buildFilterChip(
-                    'registration', 'Pendaftaran', Icons.how_to_reg_outlined),
-                _buildFilterChip('payment', 'Pembayaran',
-                    Icons.account_balance_wallet_outlined),
+                  'registration',
+                  'Pendaftaran',
+                  Icons.how_to_reg_outlined,
+                ),
                 _buildFilterChip(
-                    'holiday', 'Libur', Icons.beach_access_outlined),
+                  'payment',
+                  'Pembayaran',
+                  Icons.account_balance_wallet_outlined,
+                ),
+                _buildFilterChip(
+                  'holiday',
+                  'Libur',
+                  Icons.beach_access_outlined,
+                ),
               ],
             ),
           ),
@@ -815,7 +808,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.06),
+                  color: Colors.black.withValues(alpha: 0.06),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -831,7 +824,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
               startingDayOfWeek: StartingDayOfWeek.monday,
               calendarStyle: CalendarStyle(
                 todayDecoration: BoxDecoration(
-                  color: const Color(0xFF6BA3C0).withOpacity(0.5),
+                  color: const Color(0xFF6BA3C0).withValues(alpha: 0.5),
                   shape: BoxShape.circle,
                 ),
                 selectedDecoration: const BoxDecoration(
@@ -925,7 +918,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
             else
               ..._getEventsForDay(_selectedDay!).map((event) {
                 return _buildEventCard(event, _selectedDay!);
-              }).toList(),
+              }),
             const SizedBox(height: 20),
           ],
 
@@ -950,7 +943,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.06),
+                        color: Colors.black.withValues(alpha: 0.06),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
@@ -1038,9 +1031,15 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
               _buildFilterChip('academic', 'Akademik', Icons.school_outlined),
               _buildFilterChip('exam', 'Ujian', Icons.edit_calendar_outlined),
               _buildFilterChip(
-                  'registration', 'Pendaftaran', Icons.how_to_reg_outlined),
+                'registration',
+                'Pendaftaran',
+                Icons.how_to_reg_outlined,
+              ),
               _buildFilterChip(
-                  'payment', 'Pembayaran', Icons.account_balance_wallet_outlined),
+                'payment',
+                'Pembayaran',
+                Icons.account_balance_wallet_outlined,
+              ),
               _buildFilterChip('holiday', 'Libur', Icons.beach_access_outlined),
             ],
           ),
@@ -1093,13 +1092,16 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
                                   vertical: 6,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF4C7F9A)
-                                      .withOpacity(0.1),
+                                  color: const Color(
+                                    0xFF4C7F9A,
+                                  ).withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
-                                  DateFormat('EEEE, dd MMM yyyy', 'id_ID')
-                                      .format(date),
+                                  DateFormat(
+                                    'EEEE, dd MMM yyyy',
+                                    'id_ID',
+                                  ).format(date),
                                   style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
@@ -1157,7 +1159,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
           side: BorderSide(
             color: isSelected
                 ? const Color(0xFF4C7F9A)
-                : const Color(0xFF4C7F9A).withOpacity(0.3),
+                : const Color(0xFF4C7F9A).withValues(alpha: 0.3),
           ),
         ),
       ),
@@ -1178,12 +1180,12 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: _getEventColor(event['type']!).withOpacity(0.3),
+                color: _getEventColor(event['type']!).withValues(alpha: 0.3),
                 width: 2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
+                  color: Colors.black.withValues(alpha: 0.04),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -1194,7 +1196,9 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: _getEventColor(event['type']!).withOpacity(0.1),
+                    color: _getEventColor(
+                      event['type']!,
+                    ).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
@@ -1247,10 +1251,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
                     ],
                   ),
                 ),
-                Icon(
-                  Icons.chevron_right,
-                  color: Colors.grey.shade400,
-                ),
+                Icon(Icons.chevron_right, color: Colors.grey.shade400),
               ],
             ),
           ),
@@ -1267,7 +1268,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
 
     try {
       final pdf = pw.Document();
-      
+
       // Get all events sorted by date
       final sortedEvents = _events.entries.toList()
         ..sort((a, b) => a.key.compareTo(b.key));
@@ -1316,133 +1317,128 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
                     ),
                   ),
                 ),
-                ...events.map((event) => pw.Container(
-                  margin: const pw.EdgeInsets.only(bottom: 15),
-                  padding: const pw.EdgeInsets.all(10),
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(color: PdfColors.grey400),
-                    borderRadius: pw.BorderRadius.circular(5),
-                  ),
-                  child: pw.Column(
-                    crossAxisAlignment: pw.CrossAxisAlignment.start,
-                    children: [
-                      pw.Text(
-                        event['title']!,
-                        style: pw.TextStyle(
-                          fontSize: 16,
-                          fontWeight: pw.FontWeight.bold,
+                ...events.map(
+                  (event) => pw.Container(
+                    margin: const pw.EdgeInsets.only(bottom: 15),
+                    padding: const pw.EdgeInsets.all(10),
+                    decoration: pw.BoxDecoration(
+                      border: pw.Border.all(color: PdfColors.grey400),
+                      borderRadius: pw.BorderRadius.circular(5),
+                    ),
+                    child: pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(
+                          event['title']!,
+                          style: pw.TextStyle(
+                            fontSize: 16,
+                            fontWeight: pw.FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      pw.SizedBox(height: 5),
-                      pw.Text('Jenis: ${_getEventTypeName(event['type']!)}'),
-                      pw.Text('Waktu: ${event['time']}'),
-                      pw.Text('Lokasi: ${event['location']}'),
-                      pw.SizedBox(height: 5),
-                      pw.Text(
-                        event['desc']!,
-                        style: const pw.TextStyle(fontSize: 11),
-                      ),
-                    ],
+                        pw.SizedBox(height: 5),
+                        pw.Text('Jenis: ${_getEventTypeName(event['type']!)}'),
+                        pw.Text('Waktu: ${event['time']}'),
+                        pw.Text('Lokasi: ${event['location']}'),
+                        pw.SizedBox(height: 5),
+                        pw.Text(
+                          event['desc']!,
+                          style: const pw.TextStyle(fontSize: 11),
+                        ),
+                      ],
+                    ),
                   ),
-                )),
+                ),
               ];
             }),
           ],
         ),
       );
 
-    // Save PDF to device Downloads folder
-    final fileName = 'kalender_akademik_2025_2026_${DateTime.now().millisecondsSinceEpoch}.pdf';
-    final bytes = await pdf.save();
+      // Save PDF to device Downloads folder
+      final fileName =
+          'kalender_akademik_2025_2026_${DateTime.now().millisecondsSinceEpoch}.pdf';
+      final bytes = await pdf.save();
 
-    // Handle Web Platform
-    if (kIsWeb) {
-      await Printing.sharePdf(
-        bytes: bytes,
-        filename: fileName,
-      );
-      return;
-    }
+      // Handle Web Platform
+      if (kIsWeb) {
+        await Printing.sharePdf(bytes: bytes, filename: fileName);
+        return;
+      }
 
-    // Handle Mobile Platform
-    try {
-      Directory? directory;
-      String folderName = 'Download';
+      // Handle Mobile Platform
+      try {
+        Directory? directory;
+        String folderName = 'Download';
 
-      if (Platform.isAndroid) {
-        // Try multiple paths for Android
-        final List<String> possiblePaths = [
-          '/storage/emulated/0/Download',
-          '/storage/emulated/0/Downloads',
-        ];
-        
-        bool foundPath = false;
-        for (String path in possiblePaths) {
-          try {
-             directory = Directory(path);
-             if (await directory.exists()) {
-               foundPath = true;
-               break;
-             }
-          } catch (_) {}
-        }
-        
-        // Fallback to app-specific external storage
-        if (!foundPath) {
-          try {
-            final externalDir = await getExternalStorageDirectory();
-            if (externalDir != null) {
-              directory = Directory('${externalDir.path}/Downloads');
-              if (!await directory.exists()) {
-                await directory.create(recursive: true);
+        if (Platform.isAndroid) {
+          // Try multiple paths for Android
+          final List<String> possiblePaths = [
+            '/storage/emulated/0/Download',
+            '/storage/emulated/0/Downloads',
+          ];
+
+          bool foundPath = false;
+          for (String path in possiblePaths) {
+            try {
+              directory = Directory(path);
+              if (await directory.exists()) {
+                foundPath = true;
+                break;
               }
-              folderName = directory.path;
-            }
-          } catch (_) {}
+            } catch (_) {}
+          }
+
+          // Fallback to app-specific external storage
+          if (!foundPath) {
+            try {
+              final externalDir = await getExternalStorageDirectory();
+              if (externalDir != null) {
+                directory = Directory('${externalDir.path}/Downloads');
+                if (!await directory.exists()) {
+                  await directory.create(recursive: true);
+                }
+                folderName = directory.path;
+              }
+            } catch (_) {}
+          }
+        } else {
+          directory = await getApplicationDocumentsDirectory();
+          folderName = directory.path;
         }
-      } else {
-        directory = await getApplicationDocumentsDirectory();
-        folderName = directory.path;
-      }
 
-      if (directory == null) {
-        directory = await getApplicationDocumentsDirectory();
-      }
+        directory ??= await getApplicationDocumentsDirectory();
 
-      final file = File('${directory.path}/$fileName');
-      await file.writeAsBytes(bytes);
+        final file = File('${directory.path}/$fileName');
+        await file.writeAsBytes(bytes);
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('PDF berhasil disimpan di $folderName'),
-            backgroundColor: const Color(0xFF4C7F9A),
-            duration: const Duration(seconds: 5),
-            action: SnackBarAction(
-              label: 'BUKA',
-              textColor: Colors.white,
-              onPressed: () {
-                OpenFile.open(file.path);
-              },
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('PDF berhasil disimpan di $folderName'),
+              backgroundColor: const Color(0xFF4C7F9A),
+              duration: const Duration(seconds: 5),
+              action: SnackBarAction(
+                label: 'BUKA',
+                textColor: Colors.white,
+                onPressed: () {
+                  OpenFile.open(file.path);
+                },
+              ),
             ),
-          ),
-        );
-      }
+          );
+        }
 
-      // Open the PDF
-      await OpenFile.open(file.path);
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-           const SnackBar(content: Text('Mencoba metode alternatif...')),
-        );
+        // Open the PDF
+        await OpenFile.open(file.path);
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Mencoba metode alternatif...')),
+          );
+        }
+        // Fallback sharing if direct save fails
+        await Printing.sharePdf(bytes: bytes, filename: fileName);
       }
-      // Fallback sharing if direct save fails
-      await Printing.sharePdf(
-        bytes: bytes,
-        filename: fileName,
-      );
-    }
     } catch (e) {
       // Global error handler for PDF generation
       debugPrint('Error generating PDF: $e');
@@ -1502,11 +1498,12 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
       }
 
       // Save Excel file
-      final fileName = 'kalender_akademik_2025_2026_${DateTime.now().millisecondsSinceEpoch}.xlsx';
+      final fileName =
+          'kalender_akademik_2025_2026_${DateTime.now().millisecondsSinceEpoch}.xlsx';
       final excelBytes = excel.encode();
-      
+
       if (excelBytes == null) {
-         throw Exception('Gagal meng-encode Excel');
+        throw Exception('Gagal meng-encode Excel');
       }
 
       // Handle Web Platform
@@ -1525,39 +1522,39 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
           directory = Directory('/storage/emulated/0/Download');
           // Fallback
           if (!await directory.exists()) {
-             directory = await getExternalStorageDirectory();
+            directory = await getExternalStorageDirectory();
           }
         } else {
           directory = await getApplicationDocumentsDirectory();
         }
       } catch (e) {
-          directory = await getApplicationDocumentsDirectory();
+        directory = await getApplicationDocumentsDirectory();
       }
 
       final file = File('${directory!.path}/$fileName');
       // Already encoded above
-      
+
       await file.writeAsBytes(excelBytes);
 
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Excel berhasil disimpan di ${file.path}'),
-              backgroundColor: const Color(0xFF4C7F9A),
-              duration: const Duration(seconds: 3),
-              action: SnackBarAction(
-                label: 'BUKA',
-                textColor: Colors.white,
-                onPressed: () {
-                  OpenFile.open(file.path);
-                },
-              ),
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Excel berhasil disimpan di ${file.path}'),
+            backgroundColor: const Color(0xFF4C7F9A),
+            duration: const Duration(seconds: 3),
+            action: SnackBarAction(
+              label: 'BUKA',
+              textColor: Colors.white,
+              onPressed: () {
+                OpenFile.open(file.path);
+              },
             ),
-          );
-        }
+          ),
+        );
+      }
 
-        // Open the Excel file
-        await OpenFile.open(file.path);
+      // Open the Excel file
+      await OpenFile.open(file.path);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -1582,21 +1579,21 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
     // might require nothing if using proper API, or just simple file IO if supported.
     // However, permission_handler maps storage to READ_EXTERNAL_STORAGE/WRITE_EXTERNAL_STORAGE
     // which are deprecated or limited in 13+
-    
+
     // Simple robust check:
     var status = await Permission.storage.status;
-    
+
     if (status.isGranted) {
       return true;
     }
-    
+
     // Request permission
     status = await Permission.storage.request();
-    
+
     if (status.isGranted) {
       return true;
     }
-    
+
     // If denied, try photos (sometimes used as proxy for "storage" in improper setups or just to get Read access)
     // But for Downloads, let's try to notify user.
     if (status.isPermanentlyDenied) {
@@ -1606,7 +1603,8 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
           builder: (context) => AlertDialog(
             title: const Text('Izin Diperlukan'),
             content: const Text(
-                'Aplikasi memerlukan izin penyimpanan untuk menyimpan file kalender. Silakan aktifkan di pengaturan.'),
+              'Aplikasi memerlukan izin penyimpanan untuk menyimpan file kalender. Silakan aktifkan di pengaturan.',
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -1625,12 +1623,15 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
       }
       return false;
     }
-    
+
     return status.isGranted;
   }
 
   // Add to Device Calendar Feature
-  Future<void> _addToDeviceCalendar(Map<String, String> eventData, DateTime date) async {
+  Future<void> _addToDeviceCalendar(
+    Map<String, String> eventData,
+    DateTime date,
+  ) async {
     try {
       // Parse time
       final timeStr = eventData['time']!;
@@ -1674,7 +1675,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
       );
 
       final result = await Add2Calendar.addEvent2Cal(event);
-      
+
       if (mounted) {
         if (result) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -1695,10 +1696,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: $e'),
-            backgroundColor: Colors.red,
-          ),
+          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
         );
       }
     }
@@ -1737,16 +1735,21 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
   }
 
   // Set Reminder Feature
-  Future<void> _setReminder(Map<String, String> eventData, DateTime date) async {
+  Future<void> _setReminder(
+    Map<String, String> eventData,
+    DateTime date,
+  ) async {
     try {
       // Request notification permission
       final status = await Permission.notification.request();
-      
+
       if (!status.isGranted) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Izin notifikasi diperlukan untuk mengatur reminder'),
+              content: Text(
+                'Izin notifikasi diperlukan untuk mengatur reminder',
+              ),
               backgroundColor: Colors.orange,
             ),
           );
@@ -1756,7 +1759,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
 
       // Schedule notification 1 day before the event
       final reminderDate = date.subtract(const Duration(days: 1));
-      
+
       // Only schedule if the reminder date is in the future
       if (reminderDate.isAfter(DateTime.now())) {
         const androidDetails = AndroidNotificationDetails(
@@ -1766,20 +1769,21 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
           importance: Importance.high,
           priority: Priority.high,
         );
-        
+
         const iosDetails = DarwinNotificationDetails(
           presentAlert: true,
           presentBadge: true,
           presentSound: true,
         );
-        
+
         const notificationDetails = NotificationDetails(
           android: androidDetails,
           iOS: iosDetails,
         );
 
         // Use a unique ID based on the event title and date
-        final notificationId = '${eventData['title']}_${date.millisecondsSinceEpoch}'.hashCode;
+        final notificationId =
+            '${eventData['title']}_${date.millisecondsSinceEpoch}'.hashCode;
 
         await _notificationsPlugin.show(
           notificationId,
@@ -1831,7 +1835,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
       leading: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
+          color: color.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Icon(icon, color: color, size: 24),
@@ -1846,10 +1850,7 @@ class _KalenderAkademikPageState extends State<KalenderAkademikPage>
       ),
       subtitle: Text(
         subtitle,
-        style: TextStyle(
-          fontSize: 13,
-          color: Colors.grey.shade600,
-        ),
+        style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
       ),
     );
   }

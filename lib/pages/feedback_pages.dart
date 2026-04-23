@@ -126,8 +126,9 @@ class _FeedbackPagesState extends State<FeedbackPages> {
                               onPressed: isLoading ? null : _sendFeedback,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF4C7F9A),
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 14),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -179,7 +180,9 @@ class _FeedbackPagesState extends State<FeedbackPages> {
     if (feedbackController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Silahkan isi masukan Anda terlebih dahulu untuk dikirim."),
+          content: Text(
+            "Silahkan isi masukan Anda terlebih dahulu untuk dikirim.",
+          ),
           backgroundColor: Color.fromARGB(255, 225, 0, 0),
         ),
       );
@@ -190,6 +193,7 @@ class _FeedbackPagesState extends State<FeedbackPages> {
 
     await Future.delayed(const Duration(seconds: 1));
 
+    if (!mounted) return;
     setState(() => isLoading = false);
 
     ScaffoldMessenger.of(context).showSnackBar(

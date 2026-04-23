@@ -17,14 +17,14 @@ class TugasDetailPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFFDF7EE),
       appBar: AppBar(
-  backgroundColor: const Color(0xFF4C7F9A),
-  centerTitle: true, //text di tengah
-  title: const Text(
-    "Detail Tugas",
-    style: TextStyle(color: Colors.white),
-  ),
-  iconTheme: const IconThemeData(color: Colors.white),
-),
+        backgroundColor: const Color(0xFF4C7F9A),
+        centerTitle: true, //text di tengah
+        title: const Text(
+          "Detail Tugas",
+          style: TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
       body: Center(
         child: Container(
           width: double.infinity,
@@ -38,7 +38,7 @@ class TugasDetailPage extends StatelessWidget {
                 color: Colors.black12,
                 blurRadius: 12,
                 offset: Offset(0, 6),
-              )
+              ),
             ],
           ),
           child: Column(
@@ -58,10 +58,7 @@ class TugasDetailPage extends StatelessWidget {
                 "Mata Kuliah: $matkul",
                 style: const TextStyle(fontSize: 16),
               ),
-              Text(
-                "Deadline: $deadline",
-                style: const TextStyle(fontSize: 16),
-              ),
+              Text("Deadline: $deadline", style: const TextStyle(fontSize: 16)),
               const SizedBox(height: 24),
               Container(
                 width: double.infinity,
@@ -71,7 +68,10 @@ class TugasDetailPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: const [
                     BoxShadow(
-                        color: Colors.black12, blurRadius: 6, offset: Offset(0, 3))
+                      color: Colors.black12,
+                      blurRadius: 6,
+                      offset: Offset(0, 3),
+                    ),
                   ],
                 ),
                 child: const Center(
@@ -87,13 +87,17 @@ class TugasDetailPage extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF4C7F9A),
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 14,
+                  ),
                   elevation: 6,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
                 child: const Text("Kembali", style: TextStyle(fontSize: 16)),
-              )
+              ),
             ],
           ),
         ),

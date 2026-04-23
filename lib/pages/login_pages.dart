@@ -26,25 +26,29 @@ class _LoginPagesState extends State<LoginPages> {
 
     if (res['status'] == 200) {
       await ApiService.saveToken(res['data'], nimOrEmailController.text);
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.success,
-        text: 'Login Berhasil',
-        onConfirmBtnTap: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const DashboardPages()),
-          );
-        },
-      );
+      if (mounted) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.success,
+          text: 'Login Berhasil',
+          onConfirmBtnTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const DashboardPages()),
+            );
+          },
+        );
+      }
     } else {
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.error,
-        text: 'NIM/Email atau Password Salah!', // Update pesan error
-      );
+      if (mounted) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          text: res['error'] ?? 'NIM/Email atau Password Salah!',
+        );
+      }
     }
-    setState(() => isLoading = false);
+    if (mounted) setState(() => isLoading = false);
   }
 
   @override
@@ -65,7 +69,7 @@ class _LoginPagesState extends State<LoginPages> {
                     borderRadius: BorderRadius.circular(25),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         offset: const Offset(0, 3),
                         blurRadius: 6,
                       ),
@@ -77,7 +81,9 @@ class _LoginPagesState extends State<LoginPages> {
                       Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor.withOpacity(0.9),
+                          color: Theme.of(
+                            context,
+                          ).primaryColor.withValues(alpha: 0.9),
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(25),
                             topRight: Radius.circular(25),
@@ -146,7 +152,9 @@ class _LoginPagesState extends State<LoginPages> {
                                   color: Theme.of(context).primaryColor,
                                 ),
                                 filled: true,
-                                fillColor: Theme.of(context).scaffoldBackgroundColor,
+                                fillColor: Theme.of(
+                                  context,
+                                ).scaffoldBackgroundColor,
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   borderSide: BorderSide.none,
@@ -170,7 +178,9 @@ class _LoginPagesState extends State<LoginPages> {
                                   color: Theme.of(context).primaryColor,
                                 ),
                                 filled: true,
-                                fillColor: Theme.of(context).scaffoldBackgroundColor,
+                                fillColor: Theme.of(
+                                  context,
+                                ).scaffoldBackgroundColor,
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   borderSide: BorderSide.none,
@@ -199,7 +209,9 @@ class _LoginPagesState extends State<LoginPages> {
                                 child: Text(
                                   'Forgot password?',
                                   style: TextStyle(
-                                    color: Theme.of(context).primaryColor.withOpacity(0.95),
+                                    color: Theme.of(
+                                      context,
+                                    ).primaryColor.withValues(alpha: 0.95),
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -219,7 +231,9 @@ class _LoginPagesState extends State<LoginPages> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                      backgroundColor: Theme.of(
+                        context,
+                      ).scaffoldBackgroundColor,
                       foregroundColor: Theme.of(context).primaryColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),

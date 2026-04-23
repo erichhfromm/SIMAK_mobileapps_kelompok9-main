@@ -19,7 +19,7 @@ class _ESertifikatPageState extends State<ESertifikatPage>
       "date": "15 Nov 2024",
       "organizer": "Fakultas Ilmu Komputer",
       "status": "Verified",
-      "file": "cert_hackathon_2024.pdf"
+      "file": "cert_hackathon_2024.pdf",
     },
     {
       "title": "Peserta Seminar Nasional AI",
@@ -27,7 +27,7 @@ class _ESertifikatPageState extends State<ESertifikatPage>
       "date": "20 Okt 2024",
       "organizer": "Himpunan Mahasiswa TI",
       "status": "Verified",
-      "file": "cert_seminar_ai.pdf"
+      "file": "cert_seminar_ai.pdf",
     },
     {
       "title": "Workshop Flutter Development",
@@ -35,7 +35,7 @@ class _ESertifikatPageState extends State<ESertifikatPage>
       "date": "05 Okt 2024",
       "organizer": "Google Developer Student Clubs",
       "status": "Verified",
-      "file": "cert_workshop_flutter.pdf"
+      "file": "cert_workshop_flutter.pdf",
     },
     {
       "title": "Panitia Dies Natalis ke-40",
@@ -43,7 +43,7 @@ class _ESertifikatPageState extends State<ESertifikatPage>
       "date": "10 Sep 2024",
       "organizer": "Universitas SWU",
       "status": "Verified",
-      "file": "cert_panitia_dies.pdf"
+      "file": "cert_panitia_dies.pdf",
     },
     {
       "title": "TOEFL Preparation Course",
@@ -51,7 +51,7 @@ class _ESertifikatPageState extends State<ESertifikatPage>
       "date": "12 Agu 2024",
       "organizer": "Pusat Bahasa",
       "status": "Verified",
-      "file": "cert_toefl_prep.pdf"
+      "file": "cert_toefl_prep.pdf",
     },
   ];
 
@@ -81,7 +81,12 @@ class _ESertifikatPageState extends State<ESertifikatPage>
       _filteredCertificates = _allCertificates;
     } else {
       _filteredCertificates = _allCertificates
-          .where((cert) => cert["category"] == _selectedCategory || (cert["category"] == "Organisasi" && _selectedCategory == "Lomba")) // Simplifikasi mapping
+          .where(
+            (cert) =>
+                cert["category"] == _selectedCategory ||
+                (cert["category"] == "Organisasi" &&
+                    _selectedCategory == "Lomba"),
+          ) // Simplifikasi mapping
           .toList();
     }
   }
@@ -99,10 +104,7 @@ class _ESertifikatPageState extends State<ESertifikatPage>
       appBar: AppBar(
         title: const Text(
           'E-Sertifikat',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: const Color(0xFF4C7F9A),
@@ -135,8 +137,8 @@ class _ESertifikatPageState extends State<ESertifikatPage>
                 bottomRight: Radius.circular(24),
               ),
               boxShadow: [
-                 BoxShadow(
-                  color: const Color(0xFF4C7F9A).withOpacity(0.3),
+                BoxShadow(
+                  color: const Color(0xFF4C7F9A).withValues(alpha: 0.3),
                   blurRadius: 10,
                   offset: const Offset(0, 5),
                 ),
@@ -147,10 +149,14 @@ class _ESertifikatPageState extends State<ESertifikatPage>
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.workspace_premium, color: Colors.white, size: 32),
+                  child: const Icon(
+                    Icons.workspace_premium,
+                    color: Colors.white,
+                    size: 32,
+                  ),
                 ),
                 const SizedBox(width: 16),
                 const Expanded(
@@ -168,10 +174,7 @@ class _ESertifikatPageState extends State<ESertifikatPage>
                       SizedBox(height: 4),
                       Text(
                         "Unduh sertifikat kegiatan akademik dan non-akademik Anda di sini.",
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 12,
-                        ),
+                        style: TextStyle(color: Colors.white70, fontSize: 12),
                       ),
                     ],
                   ),
@@ -179,7 +182,7 @@ class _ESertifikatPageState extends State<ESertifikatPage>
               ],
             ),
           ),
-          
+
           // List Sertifikat
           Expanded(
             child: _filteredCertificates.isEmpty
@@ -203,7 +206,11 @@ class _ESertifikatPageState extends State<ESertifikatPage>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.folder_open_rounded, size: 80, color: Colors.grey.shade300),
+          Icon(
+            Icons.folder_open_rounded,
+            size: 80,
+            color: Colors.grey.shade300,
+          ),
           const SizedBox(height: 16),
           Text(
             "Belum ada sertifikat di kategori ini",
@@ -222,7 +229,7 @@ class _ESertifikatPageState extends State<ESertifikatPage>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -242,24 +249,29 @@ class _ESertifikatPageState extends State<ESertifikatPage>
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-                    color: _CategoryColor(cert["category"]).withOpacity(0.1),
+                    color: _categoryColor(
+                      cert["category"],
+                    ).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
-                    _CategoryIcon(cert["category"]),
-                    color: _CategoryColor(cert["category"]),
+                    _categoryIcon(cert["category"]),
+                    color: _categoryColor(cert["category"]),
                     size: 30,
                   ),
                 ),
                 const SizedBox(width: 16),
-                
+
                 // Content
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 3,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.grey.shade100,
                           borderRadius: BorderRadius.circular(4),
@@ -305,23 +317,33 @@ class _ESertifikatPageState extends State<ESertifikatPage>
   }
 
   // Helpers untuk UI dinamis berdasarkan kategori
-  Color _CategoryColor(String category) {
+  Color _categoryColor(String category) {
     switch (category) {
-      case "Lomba": return Colors.orange;
-      case "Seminar": return Colors.purple;
-      case "Workshop": return Colors.blue;
-      case "Organisasi": return Colors.teal;
-      default: return Colors.blueGrey;
+      case "Lomba":
+        return Colors.orange;
+      case "Seminar":
+        return Colors.purple;
+      case "Workshop":
+        return Colors.blue;
+      case "Organisasi":
+        return Colors.teal;
+      default:
+        return Colors.blueGrey;
     }
   }
 
-  IconData _CategoryIcon(String category) {
+  IconData _categoryIcon(String category) {
     switch (category) {
-      case "Lomba": return Colors.orange is Color ? Icons.emoji_events_outlined : Icons.star;
-      case "Seminar": return Icons.mic_external_on_outlined;
-      case "Workshop": return Icons.build_circle_outlined;
-      case "Organisasi": return Icons.groups_outlined; 
-      default: return Icons.article_outlined;
+      case "Lomba":
+        return Icons.emoji_events_outlined;
+      case "Seminar":
+        return Icons.mic_external_on_outlined;
+      case "Workshop":
+        return Icons.build_circle_outlined;
+      case "Organisasi":
+        return Icons.groups_outlined;
+      default:
+        return Icons.article_outlined;
     }
   }
 
@@ -348,9 +370,9 @@ class _ESertifikatPageState extends State<ESertifikatPage>
             ),
             const SizedBox(height: 24),
             Icon(
-              _CategoryIcon(cert["category"]),
+              _categoryIcon(cert["category"]),
               size: 64,
-              color: _CategoryColor(cert["category"]),
+              color: _categoryColor(cert["category"]),
             ),
             const SizedBox(height: 16),
             Text(
@@ -367,13 +389,13 @@ class _ESertifikatPageState extends State<ESertifikatPage>
               "Penyelenggara: ${cert['organizer']}",
               style: TextStyle(color: Colors.grey.shade600),
             ),
-             const SizedBox(height: 4),
-             Text(
+            const SizedBox(height: 4),
+            Text(
               "Tanggal: ${cert['date']}",
-               style: TextStyle(color: Colors.grey.shade600),
+              style: TextStyle(color: Colors.grey.shade600),
             ),
             const SizedBox(height: 32),
-            
+
             // Action Buttons
             Row(
               children: [
@@ -384,7 +406,9 @@ class _ESertifikatPageState extends State<ESertifikatPage>
                     label: const Text("Bagikan"),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
                 ),
@@ -392,18 +416,23 @@ class _ESertifikatPageState extends State<ESertifikatPage>
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: () {
-                       Navigator.pop(context);
-                       ScaffoldMessenger.of(context).showSnackBar(
-                         const SnackBar(content: Text("Mengunduh sertifikat..."), backgroundColor: Color(0xFF4C7F9A)),
-                       );
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Mengunduh sertifikat..."),
+                          backgroundColor: Color(0xFF4C7F9A),
+                        ),
+                      );
                     },
                     icon: const Icon(Icons.download_rounded),
                     label: const Text("Unduh PDF"),
-                     style: ElevatedButton.styleFrom(
+                    style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF4C7F9A), // Theme color
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
                 ),

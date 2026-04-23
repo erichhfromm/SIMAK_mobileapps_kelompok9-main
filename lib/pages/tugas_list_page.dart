@@ -11,17 +11,17 @@ class TugasListPage extends StatelessWidget {
       {
         "matkul": "Mobile Programming",
         "judul": "Tugas Membuat Layout Login",
-        "deadline": "12 Jan 2025"
+        "deadline": "12 Jan 2025",
       },
       {
         "matkul": "Data Mining",
         "judul": "Tugas Preprocessing Dataset",
-        "deadline": "18 Jan 2025"
+        "deadline": "18 Jan 2025",
       },
       {
         "matkul": "Sistem Basis Data",
         "judul": "Rancang ERD Database",
-        "deadline": "20 Jan 2025"
+        "deadline": "20 Jan 2025",
       },
     ];
 
@@ -51,7 +51,7 @@ class TugasListPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.06),
+                  color: Colors.black.withValues(alpha: 0.06),
                   blurRadius: 4,
                   offset: const Offset(0, 3),
                 ),
@@ -62,14 +62,20 @@ class TugasListPage extends StatelessWidget {
               leading: Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF4C7F9A).withOpacity(0.15),
+                  color: const Color(0xFF4C7F9A).withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Icon(Icons.description_outlined, color: Color(0xFF4C7F9A)),
+                child: const Icon(
+                  Icons.description_outlined,
+                  color: Color(0xFF4C7F9A),
+                ),
               ),
               title: Text(
                 item["judul"]!,
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               subtitle: Text(
                 item["matkul"]!,
@@ -78,10 +84,17 @@ class TugasListPage extends StatelessWidget {
               trailing: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.calendar_today_rounded, size: 16, color: Color(0xFF4C7F9A)),
+                  const Icon(
+                    Icons.calendar_today_rounded,
+                    size: 16,
+                    color: Color(0xFF4C7F9A),
+                  ),
                   Text(
                     item["deadline"]!,
-                    style: const TextStyle(fontSize: 11, color: Color(0xFF4C7F9A)),
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: Color(0xFF4C7F9A),
+                    ),
                   ),
                 ],
               ),

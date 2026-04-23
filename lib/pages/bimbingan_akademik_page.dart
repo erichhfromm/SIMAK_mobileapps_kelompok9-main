@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
@@ -18,8 +17,6 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
   final TextEditingController _topicController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   DateTime? _selectedDate;
-  bool _isLoading = true;
-
   // Enhanced data model with status
   final List<Map<String, dynamic>> _guidanceHistory = [
     {
@@ -56,10 +53,7 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
     'phone': '+62 812-3456-7890',
   };
 
-  Map<String, String> _mahasiswa = {
-    'name': 'Loading...',
-    'nim': 'Loading...',
-  };
+  Map<String, String> _mahasiswa = {'name': 'Loading...', 'nim': 'Loading...'};
 
   @override
   void initState() {
@@ -70,17 +64,35 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
 
   // Helper function to format date in Indonesian
   String _formatDateIndonesian(DateTime date) {
-    final days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-    final months = [
-      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    final days = [
+      'Minggu',
+      'Senin',
+      'Selasa',
+      'Rabu',
+      'Kamis',
+      'Jumat',
+      'Sabtu',
     ];
-    
+    final months = [
+      'Januari',
+      'Februari',
+      'Maret',
+      'April',
+      'Mei',
+      'Juni',
+      'Juli',
+      'Agustus',
+      'September',
+      'Oktober',
+      'November',
+      'Desember',
+    ];
+
     final dayName = days[date.weekday % 7];
     final day = date.day.toString().padLeft(2, '0');
     final monthName = months[date.month - 1];
     final year = date.year;
-    
+
     return '$dayName, $day $monthName $year';
   }
 
@@ -96,11 +108,7 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
 
       if (token == null || email == null) {
         setState(() {
-          _mahasiswa = {
-            'name': 'User tidak ditemukan',
-            'nim': '-',
-          };
-          _isLoading = false;
+          _mahasiswa = {'name': 'User tidak ditemukan', 'nim': '-'};
         });
         return;
       }
@@ -120,27 +128,18 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
             'name': userData['nama']?.toString().toUpperCase() ?? 'Mahasiswa',
             'nim': userData['nim']?.toString() ?? '-',
           };
-          _isLoading = false;
         });
         // Load guidance history after user data is loaded
         await _loadGuidanceHistory();
       } else {
         setState(() {
-          _mahasiswa = {
-            'name': 'Data tidak tersedia',
-            'nim': '-',
-          };
-          _isLoading = false;
+          _mahasiswa = {'name': 'Data tidak tersedia', 'nim': '-'};
         });
       }
     } catch (e) {
-      print('Error loading user data: $e');
+      debugPrint('Error loading user data: $e');
       setState(() {
-        _mahasiswa = {
-          'name': 'Error memuat data',
-          'nim': '-',
-        };
-        _isLoading = false;
+        _mahasiswa = {'name': 'Error memuat data', 'nim': '-'};
       });
     }
   }
@@ -156,46 +155,55 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
   Future<void> _loadGuidanceHistory() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final historyJson = prefs.getString('guidance_history_${_mahasiswa['nim']}');
-      
+      final historyJson = prefs.getString(
+        'guidance_history_${_mahasiswa['nim']}',
+      );
+
       if (historyJson != null) {
         final List<dynamic> decoded = json.decode(historyJson);
         setState(() {
           _guidanceHistory.clear();
-          _guidanceHistory.addAll(decoded.map((item) {
-            return {
-              'no': item['no'],
-              'date': DateTime.parse(item['date']),
-              'topic': item['topic'],
-              'note': item['note'],
-              'status': item['status'],
-              'statusColor': _getColorFromString(item['statusColor']),
-            };
-          }).toList());
+          _guidanceHistory.addAll(
+            decoded.map((item) {
+              return {
+                'no': item['no'],
+                'date': DateTime.parse(item['date']),
+                'topic': item['topic'],
+                'note': item['note'],
+                'status': item['status'],
+                'statusColor': _getColorFromString(item['statusColor']),
+              };
+            }).toList(),
+          );
         });
       }
     } catch (e) {
-      print('Error loading guidance history: $e');
+      debugPrint('Error loading guidance history: $e');
     }
   }
 
   Future<void> _saveGuidanceHistory() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final historyJson = json.encode(_guidanceHistory.map((item) {
-        return {
-          'no': item['no'],
-          'date': (item['date'] as DateTime).toIso8601String(),
-          'topic': item['topic'],
-          'note': item['note'],
-          'status': item['status'],
-          'statusColor': _colorToString(item['statusColor'] as Color),
-        };
-      }).toList());
-      
-      await prefs.setString('guidance_history_${_mahasiswa['nim']}', historyJson);
+      final historyJson = json.encode(
+        _guidanceHistory.map((item) {
+          return {
+            'no': item['no'],
+            'date': (item['date'] as DateTime).toIso8601String(),
+            'topic': item['topic'],
+            'note': item['note'],
+            'status': item['status'],
+            'statusColor': _colorToString(item['statusColor'] as Color),
+          };
+        }).toList(),
+      );
+
+      await prefs.setString(
+        'guidance_history_${_mahasiswa['nim']}',
+        historyJson,
+      );
     } catch (e) {
-      print('Error saving guidance history: $e');
+      debugPrint('Error saving guidance history: $e');
     }
   }
 
@@ -269,7 +277,7 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
 
   void _editGuidance(int index) {
     final item = _guidanceHistory[index];
-    
+
     _topicController.text = item['topic'];
     _descriptionController.text = item['note'];
     _selectedDate = item['date'];
@@ -340,7 +348,7 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
 
   void _deleteGuidance(int index) {
     final item = _guidanceHistory[index];
-    
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -369,9 +377,7 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
                 ),
               );
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             child: const Text('Hapus'),
           ),
         ],
@@ -474,7 +480,9 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: (item['statusColor'] as Color).withOpacity(0.1),
+                            color: (item['statusColor'] as Color).withValues(
+                              alpha: 0.1,
+                            ),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(
@@ -574,14 +582,10 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: const Color(0xFF4C7F9A).withOpacity(0.1),
+            color: const Color(0xFF4C7F9A).withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(
-            icon,
-            color: const Color(0xFF4C7F9A),
-            size: 20,
-          ),
+          child: Icon(icon, color: const Color(0xFF4C7F9A), size: 20),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -590,10 +594,7 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
             children: [
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
               ),
               const SizedBox(height: 2),
               Text(
@@ -725,7 +726,7 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
       appBar: AppBar(
         backgroundColor: primary,
         elevation: 8,
-        shadowColor: const Color(0xFF4C7F9A).withOpacity(0.3),
+        shadowColor: const Color(0xFF4C7F9A).withValues(alpha: 0.3),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
@@ -764,10 +765,7 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [
-          _buildHistoryTab(primary),
-          _buildNewRequestTab(primary),
-        ],
+        children: [_buildHistoryTab(primary), _buildNewRequestTab(primary)],
       ),
     );
   }
@@ -783,14 +781,14 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [primary, primary.withOpacity(0.7)],
+                colors: [primary, primary.withValues(alpha: 0.7)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: primary.withOpacity(0.3),
+                  color: primary.withValues(alpha: 0.3),
                   blurRadius: 10,
                   offset: const Offset(0, 5),
                 ),
@@ -804,7 +802,7 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Icon(
@@ -852,9 +850,12 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
               ),
               const Spacer(),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
-                  color: primary.withOpacity(0.1),
+                  color: primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -892,10 +893,7 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
         const SizedBox(width: 8),
         Text(
           '$label: ',
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 14,
-          ),
+          style: const TextStyle(color: Colors.white70, fontSize: 14),
         ),
         Expanded(
           child: Text(
@@ -913,19 +911,19 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
 
   Widget _buildHistoryCard(Map<String, dynamic> item) {
     final index = _guidanceHistory.indexOf(item);
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: (item['statusColor'] as Color).withOpacity(0.3),
+          color: (item['statusColor'] as Color).withValues(alpha: 0.3),
           width: 2,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -941,14 +939,18 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
             child: Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: (item['statusColor'] as Color).withOpacity(0.1),
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(10)),
+                color: (item['statusColor'] as Color).withValues(alpha: 0.1),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(10),
+                ),
               ),
               child: Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: item['statusColor'],
                       borderRadius: BorderRadius.circular(6),
@@ -974,7 +976,10 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: item['statusColor'],
                       borderRadius: BorderRadius.circular(12),
@@ -1117,7 +1122,7 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [primary, primary.withOpacity(0.7)],
+                colors: [primary, primary.withValues(alpha: 0.7)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -1128,7 +1133,7 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
@@ -1153,10 +1158,7 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
                       SizedBox(height: 4),
                       Text(
                         'Isi form di bawah untuk mengajukan bimbingan',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 13,
-                        ),
+                        style: TextStyle(color: Colors.white70, fontSize: 13),
                       ),
                     ],
                   ),
@@ -1250,9 +1252,7 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
                 builder: (context, child) {
                   return Theme(
                     data: Theme.of(context).copyWith(
-                      colorScheme: ColorScheme.light(
-                        primary: primary,
-                      ),
+                      colorScheme: ColorScheme.light(primary: primary),
                     ),
                     child: child!,
                   );
@@ -1313,10 +1313,7 @@ class _BimbinganAkademikPageState extends State<BimbinganAkademikPage>
                   SizedBox(width: 8),
                   Text(
                     'Kirim Pengajuan',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),

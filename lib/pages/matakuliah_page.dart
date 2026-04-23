@@ -79,19 +79,21 @@ class _DaftarMatakuliahPageState extends State<DaftarMatakuliahPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-  elevation: 0,
-  backgroundColor: primaryColor,
-  iconTheme: const IconThemeData(color: Colors.white), // ← panah back jadi putih
-  title: const Text(
-    'Daftar Mata Kuliah Dipilih',
-    style: TextStyle(
-      fontWeight: FontWeight.bold,
-      color: Colors.white, // title putih
-      letterSpacing: 0.5,
-    ),
-  ),
-  centerTitle: true,
-),
+        elevation: 0,
+        backgroundColor: primaryColor,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ), // ← panah back jadi putih
+        title: const Text(
+          'Daftar Mata Kuliah Dipilih',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white, // title putih
+            letterSpacing: 0.5,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -111,7 +113,7 @@ class _DaftarMatakuliahPageState extends State<DaftarMatakuliahPage> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
+                    color: Colors.black.withValues(alpha: 0.08),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -126,7 +128,10 @@ class _DaftarMatakuliahPageState extends State<DaftarMatakuliahPage> {
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                         onPressed: () => Navigator.of(context).pop(),
-                        icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+                        icon: const Icon(
+                          Icons.arrow_back_ios_new,
+                          color: Colors.white,
+                        ),
                       ),
                       const SizedBox(width: 8),
                       Expanded(
@@ -167,7 +172,9 @@ class _DaftarMatakuliahPageState extends State<DaftarMatakuliahPage> {
                         hintText: 'Cari mata kuliah...',
                         prefixIcon: Icon(Icons.search, color: Colors.grey[600]),
                         border: InputBorder.none,
-                        contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 14,
+                        ),
                       ),
                     ),
                   ),
@@ -184,131 +191,195 @@ class _DaftarMatakuliahPageState extends State<DaftarMatakuliahPage> {
                       ),
                     )
                   : errorMessage != null
-                      ? Center(
-                          child: Text(
-                            errorMessage!,
-                            style: TextStyle(color: Colors.red[700], fontSize: 16),
-                          ),
-                        )
-                        : RefreshIndicator(
-                          color: primaryColor,
-                          onRefresh: fetchMatakuliah,
-                          child: Builder(builder: (context) {
-                            final filtered = _searchQuery.isEmpty
-                                ? daftarMatakuliah
-                                : daftarMatakuliah.where((e) {
-                                    final name = (e['nama_matakuliah'] ?? '').toString().toLowerCase();
-                                    final code = (e['kode'] ?? '').toString().toLowerCase();
-                                    final q = _searchQuery.toLowerCase();
-                                    return name.contains(q) || code.contains(q);
-                                  }).toList();
+                  ? Center(
+                      child: Text(
+                        errorMessage!,
+                        style: TextStyle(color: Colors.red[700], fontSize: 16),
+                      ),
+                    )
+                  : RefreshIndicator(
+                      color: primaryColor,
+                      onRefresh: fetchMatakuliah,
+                      child: Builder(
+                        builder: (context) {
+                          final filtered = _searchQuery.isEmpty
+                              ? daftarMatakuliah
+                              : daftarMatakuliah.where((e) {
+                                  final name = (e['nama_matakuliah'] ?? '')
+                                      .toString()
+                                      .toLowerCase();
+                                  final code = (e['kode'] ?? '')
+                                      .toString()
+                                      .toLowerCase();
+                                  final q = _searchQuery.toLowerCase();
+                                  return name.contains(q) || code.contains(q);
+                                }).toList();
 
-                            if (filtered.isEmpty) {
-                              return ListView(
-                                physics: const AlwaysScrollableScrollPhysics(),
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                                children: [
-                                  Column(
-                                    children: [
-                                      Icon(Icons.menu_book_rounded, size: 64, color: secondaryColor),
-                                      const SizedBox(height: 12),
-                                      const Text('Tidak ada mata kuliah', style: TextStyle(fontSize: 16)),
-                                      const SizedBox(height: 8),
-                                      const Text('Coba kata kunci lain atau tarik untuk memuat ulang', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
-                                    ],
-                                  ),
-                                ],
-                              );
-                            }
+                          if (filtered.isEmpty) {
+                            return ListView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 24,
+                              ),
+                              children: [
+                                Column(
+                                  children: [
+                                    Icon(
+                                      Icons.menu_book_rounded,
+                                      size: 64,
+                                      color: secondaryColor,
+                                    ),
+                                    const SizedBox(height: 12),
+                                    const Text(
+                                      'Tidak ada mata kuliah',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    const Text(
+                                      'Coba kata kunci lain atau tarik untuk memuat ulang',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          }
 
-                            return ListView.builder(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              itemCount: filtered.length,
-                              itemBuilder: (context, index) {
-                                final mk = filtered[index];
-                                return GestureDetector(
-                                  onTap: () {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        backgroundColor: primaryColor,
-                                        content: Text(
-                                          'Anda memilih ${mk['nama_matakuliah']}',
-                                          style: const TextStyle(color: Colors.white),
-                                        ),
-                                        behavior: SnackBarBehavior.floating,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(12),
+                          return ListView.builder(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            itemCount: filtered.length,
+                            itemBuilder: (context, index) {
+                              final mk = filtered[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: primaryColor,
+                                      content: Text(
+                                        'Anda memilih ${mk['nama_matakuliah']}',
+                                        style: const TextStyle(
+                                          color: Colors.white,
                                         ),
                                       ),
-                                    );
-                                  },
-                                  child: Container(
-                                    margin: const EdgeInsets.symmetric(vertical: 8),
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(14),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.04),
-                                          blurRadius: 8,
-                                          offset: const Offset(0, 4),
-                                        ),
-                                      ],
+                                      behavior: SnackBarBehavior.floating,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
                                     ),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          width: 54,
-                                          height: 54,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            gradient: LinearGradient(colors: [primaryColor, secondaryColor]),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              mk['jumlah_sks'].toString(),
-                                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
-                                            ),
-                                          ),
+                                  );
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                  ),
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(14),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withValues(
+                                          alpha: 0.04,
                                         ),
-                                        const SizedBox(width: 12),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                mk['nama_matakuliah'] ?? '-',
-                                                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
-                                              ),
-                                              const SizedBox(height: 6),
-                                              Row(
-                                                children: [
-                                                  Text('Kode: ${mk['kode']}', style: TextStyle(color: Colors.grey[700], fontSize: 13)),
-                                                  const SizedBox(width: 12),
-                                                  Container(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.grey[100],
-                                                      borderRadius: BorderRadius.circular(8),
-                                                    ),
-                                                    child: Text('Semester: ${mk['semester']}', style: TextStyle(color: Colors.grey[800], fontSize: 12)),
-                                                  ),
-                                                ],
-                                              ),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 54,
+                                        height: 54,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              primaryColor,
+                                              secondaryColor,
                                             ],
                                           ),
                                         ),
-                                        const SizedBox(width: 8),
-                                        Icon(Icons.chevron_right_rounded, color: secondaryColor),
-                                      ],
-                                    ),
+                                        child: Center(
+                                          child: Text(
+                                            mk['jumlah_sks'].toString(),
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              mk['nama_matakuliah'] ?? '-',
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 6),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'Kode: ${mk['kode']}',
+                                                  style: TextStyle(
+                                                    color: Colors.grey[700],
+                                                    fontSize: 13,
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 12),
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                        horizontal: 8,
+                                                        vertical: 4,
+                                                      ),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.grey[100],
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          8,
+                                                        ),
+                                                  ),
+                                                  child: Text(
+                                                    'Semester: ${mk['semester']}',
+                                                    style: TextStyle(
+                                                      color: Colors.grey[800],
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Icon(
+                                        Icons.chevron_right_rounded,
+                                        color: secondaryColor,
+                                      ),
+                                    ],
                                   ),
-                                );
-                              },
-                            );
-                          }),
-                        ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
             ),
           ],
         ),

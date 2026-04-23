@@ -15,10 +15,12 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     // delay 15 detik lalu pindah ke login
     Future.delayed(const Duration(seconds: 10), () {
-    Navigator.pushReplacement(
-  context,
-  MaterialPageRoute(builder: (context) => const WelcomePage()),
-);
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const WelcomePage()),
+        );
+      }
     });
   }
 

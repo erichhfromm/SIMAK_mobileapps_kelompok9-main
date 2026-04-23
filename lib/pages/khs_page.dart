@@ -16,7 +16,8 @@ class KHSPage extends StatefulWidget {
 }
 
 class _KHSPageState extends State<KHSPage> {
-  int _currentView = 1; // 0: KRS, 1: Hasil Studi, 2: Detail KHS (default to Hasil Studi)
+  int _currentView =
+      1; // 0: KRS, 1: Hasil Studi, 2: Detail KHS (default to Hasil Studi)
   int _selectedSemesterIndex = 0;
 
   final Color _primaryColor = const Color(0xFF5B8FA3);
@@ -76,17 +77,17 @@ class _KHSPageState extends State<KHSPage> {
     // Calculate GPA (IPS) - Dummy calculation based on dummy data
     double totalSks = 0;
     double totalPoints = 0;
-    
+
     // Using _krsDataGanjil as dummy data for the selected semester's courses
     // In a real app, you would fetch courses for the specific semester
-    final courses = _krsDataGanjil; 
+    final courses = _krsDataGanjil;
 
     for (var course in courses) {
       double sks = (course['sks'] as int).toDouble();
       totalSks += sks;
       totalPoints += sks * 4.0; // Assuming all A's (4.0) for this example
     }
-    
+
     double ips = totalSks > 0 ? totalPoints / totalSks : 0.0;
 
     pdf.addPage(
@@ -101,8 +102,17 @@ class _KHSPageState extends State<KHSPage> {
                 pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
-                    pw.Text('KARTU HASIL STUDI (KHS)', style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold)),
-                    pw.Text('Universitas - Sistem Informasi Akademik', style: const pw.TextStyle(fontSize: 14)),
+                    pw.Text(
+                      'KARTU HASIL STUDI (KHS)',
+                      style: pw.TextStyle(
+                        fontSize: 24,
+                        fontWeight: pw.FontWeight.bold,
+                      ),
+                    ),
+                    pw.Text(
+                      'Universitas - Sistem Informasi Akademik',
+                      style: const pw.TextStyle(fontSize: 14),
+                    ),
                   ],
                 ),
                 pw.PdfLogo(),
@@ -119,7 +129,13 @@ class _KHSPageState extends State<KHSPage> {
             child: pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
-                pw.Row(children: [pw.Text('Nama: Panjalu Galih Akbar'), pw.Spacer(), pw.Text('NIM: 211552000000')]),
+                pw.Row(
+                  children: [
+                    pw.Text('Nama: Panjalu Galih Akbar'),
+                    pw.Spacer(),
+                    pw.Text('NIM: 211552000000'),
+                  ],
+                ),
                 pw.SizedBox(height: 5),
                 pw.Text('Program Studi: Teknik Informatika'),
                 pw.Text('Semester: ${semesterData['semester']}'),
@@ -127,7 +143,7 @@ class _KHSPageState extends State<KHSPage> {
             ),
           ),
           pw.SizedBox(height: 20),
-          pw.Table.fromTextArray(
+          pw.TableHelper.fromTextArray(
             context: context,
             headerDecoration: const pw.BoxDecoration(color: PdfColors.grey300),
             headerHeight: 25,
@@ -158,7 +174,9 @@ class _KHSPageState extends State<KHSPage> {
                 crossAxisAlignment: pw.CrossAxisAlignment.end,
                 children: [
                   pw.Text('Total SKS: ${totalSks.toStringAsFixed(0)}'),
-                  pw.Text('Indeks Prestasi Semester (IPS): ${ips.toStringAsFixed(2)}'),
+                  pw.Text(
+                    'Indeks Prestasi Semester (IPS): ${ips.toStringAsFixed(2)}',
+                  ),
                   pw.Text('Indeks Prestasi Kumulatif (IPK): 3.85'), // Dummy IPK
                 ],
               ),
@@ -186,15 +204,13 @@ class _KHSPageState extends State<KHSPage> {
 
     // Generate the PDF bytes
     final bytes = await pdf.save();
-    final fileName = 'KHS_${semesterData['semester'].toString().replaceAll('/', '_').replaceAll(' ', '_')}.pdf';
+    final fileName =
+        'KHS_${semesterData['semester'].toString().replaceAll('/', '_').replaceAll(' ', '_')}.pdf';
 
     // Handle Web Platform
     if (kIsWeb) {
-      await Printing.sharePdf(
-        bytes: bytes,
-        filename: fileName,
-      );
-      return; 
+      await Printing.sharePdf(bytes: bytes, filename: fileName);
+      return;
     }
 
     // Handle Mobile Platform (Android/iOS)
@@ -202,25 +218,25 @@ class _KHSPageState extends State<KHSPage> {
     try {
       Directory? directory;
       String folderName = 'Download';
-      
+
       if (Platform.isAndroid) {
         // Try multiple paths for Android
         final List<String> possiblePaths = [
           '/storage/emulated/0/Download',
           '/storage/emulated/0/Downloads',
         ];
-        
+
         bool foundPath = false;
         for (String path in possiblePaths) {
           try {
-             directory = Directory(path);
-             if (await directory.exists()) {
-               foundPath = true;
-               break;
-             }
+            directory = Directory(path);
+            if (await directory.exists()) {
+              foundPath = true;
+              break;
+            }
           } catch (_) {}
         }
-        
+
         // Fallback to app-specific external storage
         if (!foundPath) {
           try {
@@ -238,16 +254,14 @@ class _KHSPageState extends State<KHSPage> {
         directory = await getApplicationDocumentsDirectory();
         folderName = directory.path;
       }
-      
+
       // Final fallback
-      if (directory == null) {
-          directory = await getApplicationDocumentsDirectory();
-      }
+      directory ??= await getApplicationDocumentsDirectory();
 
       final file = File('${directory.path}/$fileName');
-      
+
       await file.writeAsBytes(bytes);
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -264,21 +278,18 @@ class _KHSPageState extends State<KHSPage> {
           ),
         );
       }
-      
+
       // Try to open it immediately
       await OpenFile.open(file.path);
     } catch (e) {
       // If direct file saving fails (e.g. permissions), fallback to Share/Print dialog
       if (mounted) {
-         // Show error but try to share/print it as backup
-         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Mencoba metode alternatif...')),
-         );
+        // Show error but try to share/print it as backup
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Mencoba metode alternatif...')),
+        );
       }
-      await Printing.sharePdf(
-        bytes: bytes,
-        filename: fileName,
-      );
+      await Printing.sharePdf(bytes: bytes, filename: fileName);
     }
   }
 
@@ -314,7 +325,7 @@ class _KHSPageState extends State<KHSPage> {
           child: SafeArea(
             child: CircleAvatar(
               radius: 20,
-              backgroundColor: Colors.white.withOpacity(0.12),
+              backgroundColor: Colors.white.withValues(alpha: 0.12),
               child: IconButton(
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
                 splashRadius: 20,
@@ -335,7 +346,7 @@ class _KHSPageState extends State<KHSPage> {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [_primaryColor, _primaryColor.withOpacity(0.8)],
+              colors: [_primaryColor, _primaryColor.withValues(alpha: 0.8)],
             ),
           ),
         ),
@@ -354,7 +365,11 @@ class _KHSPageState extends State<KHSPage> {
                       IconButton(
                         icon: const Icon(Icons.arrow_back, color: Colors.white),
                         tooltip: 'Kembali ke Dashboard',
-                        onPressed: () => Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false),
+                        onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          '/main',
+                          (route) => false,
+                        ),
                       ),
                       const SizedBox(width: 4),
                       const Text(
@@ -366,7 +381,7 @@ class _KHSPageState extends State<KHSPage> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
@@ -389,11 +404,11 @@ class _KHSPageState extends State<KHSPage> {
               child: Container(
                 margin: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: _primaryColor.withOpacity(0.9),
+                  color: _primaryColor.withValues(alpha: 0.9),
                   borderRadius: BorderRadius.circular(30),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color: Colors.black.withValues(alpha: 0.2),
                       blurRadius: 20,
                       offset: const Offset(0, 10),
                     ),
@@ -443,7 +458,7 @@ class _KHSPageState extends State<KHSPage> {
                           Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
+                              color: Colors.white.withValues(alpha: 0.2),
                               shape: BoxShape.circle,
                             ),
                             child: IconButton(
@@ -472,7 +487,7 @@ class _KHSPageState extends State<KHSPage> {
                       margin: const EdgeInsets.symmetric(horizontal: 20),
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.15),
+                        color: Colors.white.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Row(
@@ -577,7 +592,7 @@ class _KHSPageState extends State<KHSPage> {
                                   vertical: 8,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.2),
+                                  color: Colors.white.withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: const Text(
@@ -616,14 +631,14 @@ class _KHSPageState extends State<KHSPage> {
                             children: [
                               Icon(
                                 Icons.info_outline,
-                                color: Colors.white.withOpacity(0.7),
+                                color: Colors.white.withValues(alpha: 0.7),
                                 size: 16,
                               ),
                               const SizedBox(width: 8),
                               Text(
                                 "Klik ini jika ingin melihat kartu hasil studi",
                                 style: TextStyle(
-                                  color: Colors.white.withOpacity(0.7),
+                                  color: Colors.white.withValues(alpha: 0.7),
                                   fontSize: 10,
                                 ),
                               ),
@@ -652,7 +667,7 @@ class _KHSPageState extends State<KHSPage> {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.15),
+          color: Colors.white.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(25),
         ),
         child: Column(
@@ -675,7 +690,7 @@ class _KHSPageState extends State<KHSPage> {
                     margin: const EdgeInsets.only(bottom: 8),
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: isMainColumn
@@ -751,7 +766,7 @@ class _KHSPageState extends State<KHSPage> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [_primaryColor, _primaryColor.withOpacity(0.9)],
+            colors: [_primaryColor, _primaryColor.withValues(alpha: 0.9)],
           ),
         ),
         child: SafeArea(
@@ -773,7 +788,10 @@ class _KHSPageState extends State<KHSPage> {
                       child: Center(
                         child: Text(
                           'KHS',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -787,7 +805,10 @@ class _KHSPageState extends State<KHSPage> {
               // Content list with a highlighted first item
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   child: ListView.separated(
                     itemCount: _hasilStudiData.length,
                     separatorBuilder: (_, __) => const SizedBox(height: 12),
@@ -803,7 +824,11 @@ class _KHSPageState extends State<KHSPage> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
-                              BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 12, offset: const Offset(0, 6)),
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.08),
+                                blurRadius: 12,
+                                offset: const Offset(0, 6),
+                              ),
                             ],
                           ),
                           child: Row(
@@ -811,19 +836,43 @@ class _KHSPageState extends State<KHSPage> {
                             children: [
                               Container(
                                 padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(color: Colors.grey[100], shape: BoxShape.circle),
-                                child: Icon(Icons.description, color: _primaryColor, size: 26),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.description,
+                                  color: _primaryColor,
+                                  size: 26,
+                                ),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(item['semester'], style: TextStyle(color: _primaryColor, fontWeight: FontWeight.bold, fontSize: 16)),
+                                    Text(
+                                      item['semester'],
+                                      style: TextStyle(
+                                        color: _primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
                                     const SizedBox(height: 6),
-                                    Text(item['tanggal'], style: const TextStyle(color: Colors.black54)),
+                                    Text(
+                                      item['tanggal'],
+                                      style: const TextStyle(
+                                        color: Colors.black54,
+                                      ),
+                                    ),
                                     const SizedBox(height: 8),
-                                    Text(item['status'], style: const TextStyle(color: Colors.black54)),
+                                    Text(
+                                      item['status'],
+                                      style: const TextStyle(
+                                        color: Colors.black54,
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -834,26 +883,47 @@ class _KHSPageState extends State<KHSPage> {
 
                       // Regular item style (muted card)
                       return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 14,
+                        ),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.12),
+                          color: Colors.white.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
                           children: [
                             Container(
                               padding: const EdgeInsets.all(10),
-                              decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                              child: Icon(Icons.description, color: _primaryColor, size: 22),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.description,
+                                color: _primaryColor,
+                                size: 22,
+                              ),
                             ),
                             const SizedBox(width: 12),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(item['semester'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                                  Text(
+                                    item['semester'],
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                   const SizedBox(height: 6),
-                                  Text(item['tanggal'], style: const TextStyle(color: Colors.white70)),
+                                  Text(
+                                    item['tanggal'],
+                                    style: const TextStyle(
+                                      color: Colors.white70,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -862,7 +932,10 @@ class _KHSPageState extends State<KHSPage> {
                                 _selectedSemesterIndex = index;
                                 _currentView = 2;
                               }),
-                              child: const Text('Lihat Detail', style: TextStyle(color: Colors.white70)),
+                              child: const Text(
+                                'Lihat Detail',
+                                style: TextStyle(color: Colors.white70),
+                              ),
                             ),
                           ],
                         ),
@@ -888,7 +961,7 @@ class _KHSPageState extends State<KHSPage> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [_primaryColor, _primaryColor.withOpacity(0.9)],
+            colors: [_primaryColor, _primaryColor.withValues(alpha: 0.9)],
           ),
         ),
         child: SafeArea(
@@ -909,7 +982,11 @@ class _KHSPageState extends State<KHSPage> {
             children: [
               IconButton(
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () => Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false),
+                onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/main',
+                  (route) => false,
+                ),
               ),
               const Expanded(
                 child: Text(
@@ -943,13 +1020,21 @@ class _KHSPageState extends State<KHSPage> {
           children: [
             IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () => Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false),
+              onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/main',
+                (route) => false,
+              ),
             ),
             Expanded(
               child: Text(
                 item['semester'],
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const SizedBox(width: 48),
@@ -958,7 +1043,11 @@ class _KHSPageState extends State<KHSPage> {
         const SizedBox(height: 20),
         const Text(
           "DETAIL KHS",
-          style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 20),
         Expanded(
@@ -968,7 +1057,11 @@ class _KHSPageState extends State<KHSPage> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
-                BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 20, offset: const Offset(0, 10)),
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.2),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
               ],
             ),
             child: ClipRRect(
@@ -981,15 +1074,32 @@ class _KHSPageState extends State<KHSPage> {
                     color: Colors.grey[100],
                     child: Row(
                       children: [
-                        Icon(Icons.picture_as_pdf, color: _primaryColor, size: 24),
+                        Icon(
+                          Icons.picture_as_pdf,
+                          color: _primaryColor,
+                          size: 24,
+                        ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(item['semester'], style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF2C3E50))),
+                              Text(
+                                item['semester'],
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF2C3E50),
+                                ),
+                              ),
                               const SizedBox(height: 4),
-                              Text(item['status'], style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                              Text(
+                                item['status'],
+                                style: const TextStyle(
+                                  fontSize: 11,
+                                  color: Colors.grey,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -1004,7 +1114,10 @@ class _KHSPageState extends State<KHSPage> {
                         child: Container(
                           width: double.infinity,
                           height: double.infinity,
-                          margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 40,
+                            vertical: 24,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.grey[50],
                             borderRadius: BorderRadius.circular(12),
@@ -1028,13 +1141,27 @@ class _KHSPageState extends State<KHSPage> {
               _generatePDF(item);
             },
             icon: const Icon(Icons.download),
-            label: const Text('Unduh PDF', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: _primaryColor, minimumSize: const Size(double.infinity, 50), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))),
+            label: const Text(
+              'Unduh PDF',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: _primaryColor,
+              minimumSize: const Size(double.infinity, 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25),
+              ),
+            ),
           ),
         ),
         const SizedBox(height: 20),
         // profile avatar at bottom
-        CircleAvatar(radius: 35, backgroundColor: Colors.white, child: Icon(Icons.person, size: 40, color: _primaryColor)),
+        CircleAvatar(
+          radius: 35,
+          backgroundColor: Colors.white,
+          child: Icon(Icons.person, size: 40, color: _primaryColor),
+        ),
         const SizedBox(height: 24),
       ],
     );

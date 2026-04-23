@@ -75,8 +75,10 @@ class _SuratKotakMasukPageState extends State<SuratKotakMasukPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8.5, horizontal: 14),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8.5,
+                    horizontal: 14,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border.all(color: const Color(0xFF4C7F9A)),
@@ -84,9 +86,13 @@ class _SuratKotakMasukPageState extends State<SuratKotakMasukPage> {
                   ),
                   child: Row(
                     children: const [
-                       Icon(Icons.mark_email_unread_outlined, size: 16, color: Color(0xFF4C7F9A)),
-                       SizedBox(width: 8),
-                       Text(
+                      Icon(
+                        Icons.mark_email_unread_outlined,
+                        size: 16,
+                        color: Color(0xFF4C7F9A),
+                      ),
+                      SizedBox(width: 8),
+                      Text(
                         "Kotak Masuk Akademik",
                         style: TextStyle(
                           color: Color(0xFF4C7F9A),
@@ -97,10 +103,7 @@ class _SuratKotakMasukPageState extends State<SuratKotakMasukPage> {
                     ],
                   ),
                 ),
-                Image.asset(
-                  'assets/images/logo_swu.png',
-                  height: 38,
-                ),
+                Image.asset('assets/images/logo_swu.png', height: 38),
               ],
             ),
             const SizedBox(height: 20),
@@ -119,7 +122,7 @@ class _SuratKotakMasukPageState extends State<SuratKotakMasukPage> {
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 180),
                     transform: hoveredIndex == i
-                        ? (Matrix4.identity()..translate(0.0, -4.0, 0.0))
+                        ? Matrix4.translationValues(0.0, -4.0, 0.0)
                         : Matrix4.identity(),
                     curve: Curves.easeOut,
                     child: suratCard(
@@ -159,8 +162,8 @@ class _SuratKotakMasukPageState extends State<SuratKotakMasukPage> {
           boxShadow: [
             BoxShadow(
               color: elevated
-                  ? Colors.black26.withOpacity(0.25)
-                  : Colors.black12.withOpacity(0.12),
+                  ? Colors.black26.withValues(alpha: 0.25)
+                  : Colors.black12.withValues(alpha: 0.12),
               blurRadius: elevated ? 20 : 10,
               offset: elevated ? const Offset(0, 8) : const Offset(0, 3),
             ),
@@ -171,13 +174,21 @@ class _SuratKotakMasukPageState extends State<SuratKotakMasukPage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w700, fontSize: 15)),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                  ),
+                ),
                 const SizedBox(height: 8),
-                Text(perihal,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w500, color: Colors.black87)),
+                Text(
+                  perihal,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                  ),
+                ),
                 const SizedBox(height: 10),
                 Text(
                   isi,
@@ -190,9 +201,10 @@ class _SuratKotakMasukPageState extends State<SuratKotakMasukPage> {
             Positioned(
               right: 0,
               top: 0,
-              child: Text(waktu,
-                  style:
-                      const TextStyle(color: Colors.black45, fontSize: 12)),
+              child: Text(
+                waktu,
+                style: const TextStyle(color: Colors.black45, fontSize: 12),
+              ),
             ),
           ],
         ),
@@ -200,8 +212,13 @@ class _SuratKotakMasukPageState extends State<SuratKotakMasukPage> {
     );
   }
 
-  void _showDetail(BuildContext context, String title, String perihal,
-      String isi, String waktu) {
+  void _showDetail(
+    BuildContext context,
+    String title,
+    String perihal,
+    String isi,
+    String waktu,
+  ) {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -236,7 +253,7 @@ class _SuratKotakMasukPageState extends State<SuratKotakMasukPage> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black12.withOpacity(0.15),
+            color: Colors.black12.withValues(alpha: 0.15),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -250,8 +267,10 @@ class _SuratKotakMasukPageState extends State<SuratKotakMasukPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFF4C7F9A),
                     borderRadius: BorderRadius.circular(6),
@@ -272,26 +291,40 @@ class _SuratKotakMasukPageState extends State<SuratKotakMasukPage> {
               ],
             ),
             const SizedBox(height: 8),
-            Text(title,
-                style:
-                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+            Text(
+              title,
+              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+            ),
             const SizedBox(height: 8),
-            Text(perihal,
-                style:
-                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+            Text(
+              perihal,
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+            ),
             const SizedBox(height: 6),
-            Text(waktu,
-                style: const TextStyle(color: Colors.black45, fontSize: 12)),
+            Text(
+              waktu,
+              style: const TextStyle(color: Colors.black45, fontSize: 12),
+            ),
             const SizedBox(height: 20),
-            Text(isi,
-                style: const TextStyle(
-                    height: 1.55, fontSize: 14, color: Colors.black87)),
+            Text(
+              isi,
+              style: const TextStyle(
+                height: 1.55,
+                fontSize: 14,
+                color: Colors.black87,
+              ),
+            ),
             const SizedBox(height: 30),
             Align(
               alignment: Alignment.center,
               child: ElevatedButton.icon(
-                onPressed: () async =>
-                    await _generateSuratPdf(context, title, perihal, isi, waktu),
+                onPressed: () async => await _generateSuratPdf(
+                  context,
+                  title,
+                  perihal,
+                  isi,
+                  waktu,
+                ),
                 icon: const Icon(Icons.download_rounded),
                 label: const Text("Unduh PDF"),
                 style: ElevatedButton.styleFrom(
@@ -311,9 +344,14 @@ class _SuratKotakMasukPageState extends State<SuratKotakMasukPage> {
     );
   }
 
-   /// 🧾 Generate PDF yang lebih rapi (seperti sebelumnya)
+  /// 🧾 Generate PDF yang lebih rapi (seperti sebelumnya)
   Future<void> _generateSuratPdf(
-      BuildContext context, String title, String perihal, String isi, String waktu) async {
+    BuildContext context,
+    String title,
+    String perihal,
+    String isi,
+    String waktu,
+  ) async {
     final pdf = pw.Document();
 
     pdf.addPage(
@@ -345,7 +383,7 @@ class _SuratKotakMasukPageState extends State<SuratKotakMasukPage> {
                       ),
                     ),
                   ],
-                )
+                ),
               ),
               pw.SizedBox(height: 20),
               pw.Text(
@@ -386,22 +424,22 @@ class _SuratKotakMasukPageState extends State<SuratKotakMasukPage> {
               pw.Align(
                 alignment: pw.Alignment.centerRight,
                 child: pw.Column(
-                   crossAxisAlignment: pw.CrossAxisAlignment.center,
-                   children: [
-                      pw.Text(
-                        "Hormat Kami,",
-                         style: const pw.TextStyle(fontSize: 12),
+                  crossAxisAlignment: pw.CrossAxisAlignment.center,
+                  children: [
+                    pw.Text(
+                      "Hormat Kami,",
+                      style: const pw.TextStyle(fontSize: 12),
+                    ),
+                    pw.SizedBox(height: 40),
+                    pw.Text(
+                      "Bagian Administrasi",
+                      style: pw.TextStyle(
+                        fontSize: 12,
+                        fontWeight: pw.FontWeight.bold,
+                        decoration: pw.TextDecoration.underline,
                       ),
-                      pw.SizedBox(height: 40),
-                      pw.Text(
-                        "Bagian Administrasi",
-                        style: pw.TextStyle(
-                          fontSize: 12,
-                          fontWeight: pw.FontWeight.bold,
-                          decoration: pw.TextDecoration.underline,
-                        ),
-                      ),
-                   ]
+                    ),
+                  ],
                 ),
               ),
             ],

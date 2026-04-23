@@ -72,8 +72,8 @@ class _KeuanganPageState extends State<KeuanganPage>
     try {
       _midtrans = await MidtransSDK.init(
         config: MidtransConfig(
-          // TODO: Ganti dengan Client Key Sandbox/Production Anda
-          clientKey: "SB-Mid-client-XXXXXX", 
+          // Catatan: Ganti dengan Client Key Sandbox/Production Anda
+          clientKey: "SB-Mid-client-XXXXXX",
           merchantBaseUrl: "https://api.sandbox.midtrans.com/v2/",
           colorTheme: ColorTheme(
             colorPrimary: const Color(0xFF4C7F9A),
@@ -87,7 +87,9 @@ class _KeuanganPageState extends State<KeuanganPage>
         debugPrint("Midtrans Transaction Status: ${result.status}");
         if (result.status == 'settlement' || result.status == 'capture') {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Pembayaran Berhasil! Tagihan Lunas.")),
+            const SnackBar(
+              content: Text("Pembayaran Berhasil! Tagihan Lunas."),
+            ),
           );
         } else if (result.status == 'pending') {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -215,7 +217,7 @@ class _KeuanganPageState extends State<KeuanganPage>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF4C7F9A).withOpacity(0.3),
+            color: const Color(0xFF4C7F9A).withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
@@ -277,7 +279,7 @@ class _KeuanganPageState extends State<KeuanganPage>
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF4C7F9A).withOpacity(0.1),
+                      color: const Color(0xFF4C7F9A).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(Icons.payment, color: Color(0xFF4C7F9A)),
@@ -298,7 +300,7 @@ class _KeuanganPageState extends State<KeuanganPage>
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF4C7F9A).withOpacity(0.1),
+                        color: const Color(0xFF4C7F9A).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
@@ -432,32 +434,58 @@ class _KeuanganPageState extends State<KeuanganPage>
         ),
         borderRadius: BorderRadius.circular(12),
         color: isSelected
-            ? const Color(0xFF4C7F9A).withOpacity(0.05)
+            ? const Color(0xFF4C7F9A).withValues(alpha: 0.05)
             : Colors.white,
       ),
-      child: RadioListTile<String>(
-        value: value,
-        groupValue: selectedValue,
-        onChanged: onChanged,
-        activeColor: const Color(0xFF4C7F9A),
-        title: Row(
-          children: [
-            Icon(icon, color: const Color(0xFF4C7F9A), size: 24),
-            const SizedBox(width: 12),
-            Text(
-              title,
-              style: TextStyle(
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                fontSize: 14,
+      child: InkWell(
+        onTap: () => onChanged(value),
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                isSelected
+                    ? Icons.radio_button_checked
+                    : Icons.radio_button_unchecked,
+                color: isSelected ? const Color(0xFF4C7F9A) : Colors.grey,
               ),
-            ),
-          ],
-        ),
-        subtitle: Padding(
-          padding: const EdgeInsets.only(left: 36),
-          child: Text(
-            subtitle,
-            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(icon, color: const Color(0xFF4C7F9A), size: 24),
+                        const SizedBox(width: 12),
+                        Text(
+                          title,
+                          style: TextStyle(
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.w500,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 36),
+                      child: Text(
+                        subtitle,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -473,51 +501,48 @@ class _KeuanganPageState extends State<KeuanganPage>
       builder: (c) => const Center(child: CircularProgressIndicator()),
     );
 
-    // TODO: Panggil API Backend Anda di sini untuk generate Snap Token.
-    // Backend Anda harus me-request token ke Midtrans menggunakan Server Key, 
+    // Catatan: Panggil API Backend Anda di sini untuk generate Snap Token.
+    // Backend Anda harus me-request token ke Midtrans menggunakan Server Key,
     // lalu me-return token tersebut ke aplikasi Flutter.
-    // Contoh: 
+    // Contoh:
     // final response = await Dio().post("https://backend-anda.com/api/get-snap-token", data: {"amount": amount});
     // String snapToken = response.data['token'];
 
-    // Simulasi delay request backend
     await Future.delayed(const Duration(seconds: 2));
+    if (!mounted) return;
     Navigator.pop(context); // Tutup loading
 
-    // Karena ini belum ada backend, kita akan buka simulasi dialog bawaan dulu.
-    // Jika backend sudah ada, hapus blok if(true) ini dan jalankan:
-    // _midtrans?.startPaymentUiFlow(token: snapToken);
-    
-    bool hasRealBackend = false; 
+    String methodName = method == "VA"
+        ? "Virtual Account"
+        : method == "EWALLET"
+        ? "E-Wallet"
+        : method == "TRANSFER"
+        ? "Transfer Bank"
+        : "Kartu Kredit/Debit";
 
-    if (hasRealBackend) {
-      // String dummyToken = "DUMMY_TOKEN_DARI_BACKEND";
-      // _midtrans?.startPaymentUiFlow(token: dummyToken);
-    } else {
-      String methodName = method == "VA" ? "Virtual Account" 
-          : method == "EWALLET" ? "E-Wallet" 
-          : method == "TRANSFER" ? "Transfer Bank" 
-          : "Kartu Kredit/Debit";
-
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: const Text("Simulasi Pembayaran (Midtrans)"),
-          content: Text(
-            "Anda memilih metode: $methodName.\n\n"
-            "Jika backend Midtrans sudah siap, SDK Midtrans akan otomatis terbuka di sini untuk memproses pembayaran Rp ${_formatCurrency(amount)}."
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF4C7F9A)),
-              child: const Text("Mengerti", style: TextStyle(color: Colors.white)),
-            ),
-          ],
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text("Simulasi Pembayaran (Midtrans)"),
+        content: Text(
+          "Anda memilih metode: $methodName.\n\n"
+          "Jika backend Midtrans sudah siap, SDK Midtrans akan otomatis terbuka di sini untuk memproses pembayaran Rp ${_formatCurrency(amount)}.",
         ),
-      );
-    }
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF4C7F9A),
+            ),
+            child: const Text(
+              "Mengerti",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildTagihanCard(Map<String, dynamic> item) {
@@ -530,7 +555,7 @@ class _KeuanganPageState extends State<KeuanganPage>
         border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 6,
             offset: const Offset(0, 2),
           ),
@@ -611,7 +636,7 @@ class _KeuanganPageState extends State<KeuanganPage>
         border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 6,
             offset: const Offset(0, 2),
           ),

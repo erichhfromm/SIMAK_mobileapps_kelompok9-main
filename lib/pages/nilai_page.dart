@@ -96,7 +96,7 @@ class _NilaiPageState extends State<NilaiPage> {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [_primaryColor, _primaryColor.withOpacity(0.8)],
+                  colors: [_primaryColor, _primaryColor.withValues(alpha: 0.8)],
                 ),
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(30),
@@ -155,7 +155,7 @@ class _NilaiPageState extends State<NilaiPage> {
                             vertical: 8,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
@@ -235,7 +235,7 @@ class _NilaiPageState extends State<NilaiPage> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -276,7 +276,7 @@ class _NilaiPageState extends State<NilaiPage> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: _primaryColor.withOpacity(0.1),
+                  color: _primaryColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 alignment: Alignment.center,
@@ -297,7 +297,7 @@ class _NilaiPageState extends State<NilaiPage> {
                   vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: _getStatusColor(status).withOpacity(0.1),
+                  color: _getStatusColor(status).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(

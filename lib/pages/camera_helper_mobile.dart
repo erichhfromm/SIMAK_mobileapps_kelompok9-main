@@ -1,6 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'camera_interface.dart';
 
 class MobileCamera implements ICamera {
@@ -24,7 +24,7 @@ class MobileCamera implements ICamera {
     await controller!.initialize();
     _isInitialized = true;
 
-    print("📱 Kamera Mobile berhasil diinisialisasi");
+    debugPrint("📱 Kamera Mobile berhasil diinisialisasi");
   }
 
   @override

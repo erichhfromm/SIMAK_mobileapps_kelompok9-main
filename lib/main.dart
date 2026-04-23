@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:siakad/pages/splash_screen.dart';
 import 'package:siakad/pages/welcome_page.dart';
 import 'package:siakad/pages/login_pages.dart';
 import 'package:siakad/pages/register_pages.dart';
@@ -13,7 +12,7 @@ import 'api/notification_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('id_ID', null);
-  
+
   try {
     await Firebase.initializeApp();
     await NotificationService().init();
@@ -54,7 +53,7 @@ class MyApp extends StatelessWidget {
       },
 
       // 🔹 Halaman pertama saat app dibuka
-      home: const SplashScreen(),
+      home: const BottomNav(),
 
       // 🔹 Layout responsif tengah
       builder: (context, child) {

@@ -24,11 +24,12 @@ class _KartuMahasiswaPageState extends State<KartuMahasiswaPage>
   void initState() {
     super.initState();
     _controller = AnimationController(
-        duration: const Duration(milliseconds: 600), vsync: this);
-    _animation = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOutBack,
-    ));
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+    _animation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOutBack),
+    );
   }
 
   @override
@@ -73,7 +74,10 @@ class _KartuMahasiswaPageState extends State<KartuMahasiswaPage>
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
       appBar: AppBar(
-        title: const Text("Digital Student ID", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: const Text(
+          "Digital Student ID",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: const Color(0xFF4C7F9A),
         centerTitle: true,
         elevation: 0,
@@ -83,7 +87,7 @@ class _KartuMahasiswaPageState extends State<KartuMahasiswaPage>
             icon: const Icon(Icons.print_rounded),
             tooltip: "Cetak Kartu",
             onPressed: () => _cetakKartu(context, qrData),
-          )
+          ),
         ],
       ),
       body: Center(
@@ -127,7 +131,11 @@ class _KartuMahasiswaPageState extends State<KartuMahasiswaPage>
   }
 
   Widget _buildFrontCard(
-      String nama, String nim, String prodi, String? fotoUrl) {
+    String nama,
+    String nim,
+    String prodi,
+    String? fotoUrl,
+  ) {
     return Container(
       width: 340,
       height: 220,
@@ -140,17 +148,17 @@ class _KartuMahasiswaPageState extends State<KartuMahasiswaPage>
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 15,
             offset: const Offset(0, 10),
           ),
         ],
         image: const DecorationImage(
-           image: AssetImage("assets/images/logo_swu.png"), // Watermark
-           opacity: 0.1,
-           fit: BoxFit.contain,
-           alignment: Alignment.centerRight,
-        )
+          image: AssetImage("assets/images/logo_swu.png"), // Watermark
+          opacity: 0.1,
+          fit: BoxFit.contain,
+          alignment: Alignment.centerRight,
+        ),
       ),
       child: Stack(
         children: [
@@ -163,11 +171,11 @@ class _KartuMahasiswaPageState extends State<KartuMahasiswaPage>
               height: 150,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.1),
+                color: Colors.white.withValues(alpha: 0.1),
               ),
             ),
           ),
-          
+
           Padding(
             padding: const EdgeInsets.all(24),
             child: Row(
@@ -184,29 +192,40 @@ class _KartuMahasiswaPageState extends State<KartuMahasiswaPage>
                       image: (fotoUrl != null && fotoUrl.isNotEmpty)
                           ? NetworkImage(fotoUrl)
                           : const AssetImage("assets/images/default_user.png")
-                              as ImageProvider,
+                                as ImageProvider,
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
                 const SizedBox(width: 20),
-                
+
                 // DATA text
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                       Container(
-                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                         decoration: BoxDecoration(
-                           color: Colors.white24,
-                           borderRadius: BorderRadius.circular(8),
-                         ),
-                         child: const Text("MAHASISWA", style: TextStyle(color: Colors.white, fontSize: 10, letterSpacing: 1.5, fontWeight: FontWeight.bold))
-                       ),
-                       const SizedBox(height: 12),
-                       Text(
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white24,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Text(
+                          "MAHASISWA",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            letterSpacing: 1.5,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
                         nama,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -237,7 +256,7 @@ class _KartuMahasiswaPageState extends State<KartuMahasiswaPage>
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -248,22 +267,27 @@ class _KartuMahasiswaPageState extends State<KartuMahasiswaPage>
             left: 24,
             right: 24,
             child: Row(
-               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-               children: [
-                 const Text("Universitas SWU", style: TextStyle(color: Colors.white54, fontSize: 10)),
-                 // Chip Active
-                 Container(
-                   width: 30,
-                   height: 20,
-                   decoration: BoxDecoration(
-                     color: Colors.amber.shade300,
-                     borderRadius: BorderRadius.circular(4),
-                     gradient: const LinearGradient(colors: [Color(0xFFFFD54F), Color(0xFFFFB300)])
-                   ),
-                 )
-               ],
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Universitas SWU",
+                  style: TextStyle(color: Colors.white54, fontSize: 10),
+                ),
+                // Chip Active
+                Container(
+                  width: 30,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: Colors.amber.shade300,
+                    borderRadius: BorderRadius.circular(4),
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFFFFD54F), Color(0xFFFFB300)],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -278,7 +302,7 @@ class _KartuMahasiswaPageState extends State<KartuMahasiswaPage>
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 15,
             offset: const Offset(0, 10),
           ),
@@ -287,35 +311,46 @@ class _KartuMahasiswaPageState extends State<KartuMahasiswaPage>
       child: Stack(
         alignment: Alignment.center,
         children: [
-           // Decoration Lines
-           Positioned(top: 0, left: 0, right: 0, child: Container(height: 10, decoration: const BoxDecoration(color: Color(0xFF4C7F9A), borderRadius: BorderRadius.vertical(top: Radius.circular(20))))),
+          // Decoration Lines
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: 10,
+              decoration: const BoxDecoration(
+                color: Color(0xFF4C7F9A),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+            ),
+          ),
 
-           Column(
-             mainAxisAlignment: MainAxisAlignment.center,
-             children: [
-               const Text(
-                 "PINDIG DIGITAL ID",
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey,
-                    letterSpacing: 2,
-                  ),
-               ),
-               const SizedBox(height: 20),
-               QrImageView(
-                 data: qrData,
-                 version: QrVersions.auto,
-                 size: 100,
-                 backgroundColor: Colors.white,
-               ),
-               const SizedBox(height: 16),
-               const Text(
-                 "Scan untuk verifikasi data",
-                 style: TextStyle(color: Colors.grey, fontSize: 10),
-               ),
-             ],
-           ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "PINDIG DIGITAL ID",
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                  letterSpacing: 2,
+                ),
+              ),
+              const SizedBox(height: 20),
+              QrImageView(
+                data: qrData,
+                version: QrVersions.auto,
+                size: 100,
+                backgroundColor: Colors.white,
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                "Scan untuk verifikasi data",
+                style: TextStyle(color: Colors.grey, fontSize: 10),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -324,7 +359,7 @@ class _KartuMahasiswaPageState extends State<KartuMahasiswaPage>
   // ==== PDF PRINT LOGIC (UNCHANGED BUT ADAPTED) ====
   Future<void> _cetakKartu(BuildContext context, String qrData) async {
     final pdf = pw.Document();
-    
+
     // Fallback Image handling
     pw.ImageProvider? netImage;
     try {
@@ -333,27 +368,36 @@ class _KartuMahasiswaPageState extends State<KartuMahasiswaPage>
         netImage = await networkImage(url);
       }
     } catch (_) {}
-    
+
     // QR Generation for PDF
     final qrImage = await QrPainter(
       data: qrData,
       version: QrVersions.auto,
-      color: const Color(0xFF000000),
-      emptyColor: const Color(0xFFFFFFFF),
+      eyeStyle: const QrEyeStyle(
+        color: Color(0xFF000000),
+        eyeShape: QrEyeShape.square,
+      ),
+      dataModuleStyle: const QrDataModuleStyle(
+        color: Color(0xFF000000),
+        dataModuleShape: QrDataModuleShape.square,
+      ),
     ).toImageData(200);
 
     pdf.addPage(
       pw.Page(
-        pageFormat: PdfPageFormat(85.6 * PdfPageFormat.mm, 53.98 * PdfPageFormat.mm),
+        pageFormat: PdfPageFormat(
+          85.6 * PdfPageFormat.mm,
+          53.98 * PdfPageFormat.mm,
+        ),
         build: (context) {
           return pw.Center(
             child: pw.Container(
               width: 300,
               height: 190,
               decoration: pw.BoxDecoration(
-                 color: PdfColors.white,
-                 border: pw.Border.all(),
-                 borderRadius: pw.BorderRadius.circular(10)
+                color: PdfColors.white,
+                border: pw.Border.all(),
+                borderRadius: pw.BorderRadius.circular(10),
               ),
               child: pw.Row(
                 children: [
@@ -361,10 +405,19 @@ class _KartuMahasiswaPageState extends State<KartuMahasiswaPage>
                     width: 100,
                     color: PdfColor.fromInt(0xFF4C7F9A),
                     child: pw.Center(
-                       child: netImage != null 
-                         ? pw.Image(netImage, width: 80, height: 100, fit: pw.BoxFit.cover)
-                         : pw.Container(color: PdfColors.grey300, width: 80, height: 100)
-                    )
+                      child: netImage != null
+                          ? pw.Image(
+                              netImage,
+                              width: 80,
+                              height: 100,
+                              fit: pw.BoxFit.cover,
+                            )
+                          : pw.Container(
+                              color: PdfColors.grey300,
+                              width: 80,
+                              height: 100,
+                            ),
+                    ),
                   ),
                   pw.Expanded(
                     child: pw.Padding(
@@ -373,23 +426,43 @@ class _KartuMahasiswaPageState extends State<KartuMahasiswaPage>
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
                         mainAxisAlignment: pw.MainAxisAlignment.center,
                         children: [
-                          pw.Text("KARTU MAHASISWA", style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10, color: PdfColors.blueGrey)),
+                          pw.Text(
+                            "KARTU MAHASISWA",
+                            style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold,
+                              fontSize: 10,
+                              color: PdfColors.blueGrey,
+                            ),
+                          ),
                           pw.SizedBox(height: 5),
-                          pw.Text(widget.user['nama'] ?? '-', style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 14)),
-                          pw.Text(widget.user['nim'] ?? '-', style: const pw.TextStyle(fontSize: 10)),
+                          pw.Text(
+                            widget.user['nama'] ?? '-',
+                            style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                          pw.Text(
+                            widget.user['nim'] ?? '-',
+                            style: const pw.TextStyle(fontSize: 10),
+                          ),
                           pw.SizedBox(height: 10),
                           if (qrImage != null)
-                            pw.Image(pw.MemoryImage(qrImage.buffer.asUint8List()), width: 40, height: 40)
-                        ]
-                      )
-                    )
-                  )
-                ]
-              )
-            )
+                            pw.Image(
+                              pw.MemoryImage(qrImage.buffer.asUint8List()),
+                              width: 40,
+                              height: 40,
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           );
-        }
-      )
+        },
+      ),
     );
 
     await Printing.layoutPdf(

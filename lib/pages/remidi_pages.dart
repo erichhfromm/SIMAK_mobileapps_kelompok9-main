@@ -49,7 +49,7 @@ class _RemidiPagesState extends State<RemidiPages>
         );
       }
 
-      // TODO: Ganti dengan API call yang sebenarnya
+      // Catatan: Ganti dengan API call yang sebenarnya
       // Untuk saat ini menggunakan dummy data
       await Future.delayed(const Duration(seconds: 1));
 
@@ -151,7 +151,7 @@ class _RemidiPagesState extends State<RemidiPages>
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFF4C7F9A).withOpacity(0.1),
+                color: const Color(0xFF4C7F9A).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Column(
@@ -194,7 +194,7 @@ class _RemidiPagesState extends State<RemidiPages>
     );
 
     if (confirm == true) {
-      // TODO: Implement API call untuk daftar remidi
+      // Catatan: Implement API call untuk daftar remidi
       setState(() {
         _remidiSaya.add({
           ...remidi,
@@ -263,7 +263,7 @@ class _RemidiPagesState extends State<RemidiPages>
     );
 
     if (confirm == true) {
-      // TODO: Implement API call untuk batalkan remidi
+      // Catatan: Implement API call untuk batalkan remidi
       setState(() {
         _remidiSaya.remove(remidi);
         final newRemidi = Map<String, dynamic>.from(remidi);
@@ -445,7 +445,7 @@ class _RemidiPagesState extends State<RemidiPages>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF4C7F9A).withOpacity(0.3),
+            color: const Color(0xFF4C7F9A).withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
@@ -456,7 +456,7 @@ class _RemidiPagesState extends State<RemidiPages>
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Icon(
@@ -502,7 +502,7 @@ class _RemidiPagesState extends State<RemidiPages>
         border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -515,7 +515,7 @@ class _RemidiPagesState extends State<RemidiPages>
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFF4C7F9A).withOpacity(0.1),
+              color: const Color(0xFF4C7F9A).withValues(alpha: 0.1),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
@@ -703,7 +703,7 @@ class _RemidiPagesState extends State<RemidiPages>
         border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -718,8 +718,8 @@ class _RemidiPagesState extends State<RemidiPages>
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  statusColor.withOpacity(0.1),
-                  statusColor.withOpacity(0.05),
+                  statusColor.withValues(alpha: 0.1),
+                  statusColor.withValues(alpha: 0.05),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -922,9 +922,9 @@ class _RemidiPagesState extends State<RemidiPages>
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Column(
         children: [
